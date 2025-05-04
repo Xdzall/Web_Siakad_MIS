@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MahasiswaController extends Controller
+class DosenController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function dashboard()
     {
-        //
+        return view('dosen.dashboard');
     }
+
+    public function frs()
+    {
+        return view('dosen.frs');
+    }
+
+
+    public function nilai()
+    {
+        return view('dosen.nilai');
+    }
+
 
     /**
      * Show the form for creating a new resource.
