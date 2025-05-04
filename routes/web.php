@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\MahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +29,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+Route::get('admin', function() {
+    return '<h1>admin</h1>';
+})->middleware(['auth', 'verified', 'role:admin']);
+
+Route::get('mahasiswa', function() {
+    return '<h1>mahasiswa</h1>';
+})->middleware(['auth', 'verified', 'role:mahasiswa|admin']);
+
+Route::get('matakuliah', function() {
+    return view('matakuliah.matakuliah');
+})->middleware(['auth', 'verified', 'role_or_permission:lihat-matakuliah|admin']);
+
 
 require __DIR__.'/auth.php';
