@@ -6,6 +6,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\JadwalKuliahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::get('/', function () {
 
 //punya reno
 Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
+Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal');
 Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs');
 Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai');
 Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');

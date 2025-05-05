@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\JadwalKuliah;
 
 class DosenController extends Controller
 {
@@ -25,7 +26,11 @@ class DosenController extends Controller
         return view('dosen.nilai');
     }
 
-
+    public function jadwal()
+    {
+        $jadwal = JadwalKuliah::all(); // Mengambil semua data jadwal kuliah
+        return view('dosen.jadwal', compact('jadwal'));
+    }
     /**
      * Show the form for creating a new resource.
      */
