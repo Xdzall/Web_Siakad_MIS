@@ -1,10 +1,16 @@
 @extends('layouts.dosen')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">Dashboard Dosen</h1>
+    <h1 class="text-2xl font-bold mb-4">Entry Nilai</h1>
     <p class="mb-6">Selamat datang di sistem informasi akademik sebagai dosen.</p>
 
-    <div class="text-xl font-semibold mb-4">Semester 2</div>
+    <div class="flex justify-between items-center mb-4">
+        <div class="text-xl font-semibold">Semester 2</div>
+        <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Tambah Mahasiswa
+        </a>
+    </div>
+    
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         @for ($i = 0; $i < 12; $i++)
             <div class="bg-white shadow rounded-xl p-4">
