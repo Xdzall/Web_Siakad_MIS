@@ -9,9 +9,26 @@ class MahasiswaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function dashboard()
     {
-        //
+        return view('mahasiswa.dashboard');
+    }
+
+    public function frs()
+    {
+        return view('mahasiswa.frs');
+    }
+
+
+    public function nilai()
+    {
+        return view('mahasiswa.nilai');
+    }
+
+    public function jadwal()
+    {
+        
+        return view('mahasiswa.jadwal');
     }
 
     /**

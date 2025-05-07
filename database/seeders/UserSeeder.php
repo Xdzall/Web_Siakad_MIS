@@ -27,15 +27,15 @@ class UserSeeder extends Seeder
             'password' => bcrypt('mahasiswa123'),
        ] );
 
-        $Mahasiswa->assignRole('dosen');
+        $Mahasiswa->assignRole('mahasiswa');
 
         $dosen = User::create([
             'name' => 'dosen',
             'email' => 'dosen@dosen.pens.ad.id',
-            'password' => bcrypt('doen123'),
+            'password' => bcrypt('dosen123'),
        ] );
 
-        $dosen->assignRole('mahasiswa');
+        $dosen->assignRole('dosen');
 
 
        

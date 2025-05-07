@@ -24,12 +24,19 @@ Route::get('/', function () {
 });
 
 //punya reno
-Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
-Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal');
-Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs');
-Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai');
-Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-Route::get('/mahasiswa/dashboard', [MahasiswaController::class, 'index'])->name('mahasiswa.dashboard');
+Route::get('/dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard')->middleware(['auth', 'verified', 'role:dosen']);
+Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal')->middleware(['auth', 'verified', 'role:dosen']);
+Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs')->middleware(['auth', 'verified', 'role:dosen']);
+Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai')->middleware(['auth', 'verified', 'role:dosen']);
+
+
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+
+
+Route::get('/mahasiswa', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard')->middleware(['auth', 'verified', 'role:mahasiswa']);
+Route::get('/mahasiswa/jadwal', [MahasiswaController::class, 'jadwal'])->name('mahasiswa.jadwal')->middleware(['auth', 'verified', 'role:mahasiswa']);
+Route::get('/mahasiswa/frs', [MahasiswaController::class, 'frs'])->name('mahasiswa.frs')->middleware(['auth', 'verified', 'role:mahasiswa']);
+Route::get('/mahasiswa/nilai', [MahasiswaController::class, 'nilai'])->name('mahasiswa.nilai')->middleware(['auth', 'verified', 'role:mahasiswa']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -42,18 +49,22 @@ Route::middleware('auth')->group(function () {
 });
 
 
-//punya ghazali
-Route::get('admin', function() {
-    return '<h1>admin</h1>';
-})->middleware(['auth', 'verified', 'role:admin']);
+// //punya ghazali
+// Route::get('admin', function() {
+//     return view('admin.dashboard');
+// })->middleware(['auth', 'verified', 'role:admin']);
 
-Route::get('mahasiswa', function() {
-    return '<h1>mahasiswa</h1>';
-})->middleware(['auth', 'verified', 'role:mahasiswa|admin']);
+// Route::get('mahasiswa', function() {
+//     return view('mahasiswa.dashboard');
+// })->middleware(['auth', 'verified', 'role:mahasiswa|admin']);
 
-Route::get('frs', function() {
-    return view('matakuliah.matakuliah');
-})->middleware(['auth', 'verified', 'role_or_permission:lihat-matakuliah|admin']);
+// Route::get('dosen', function() {
+//     return view(view: 'dosen.dashboard');
+// })->middleware(['auth', 'verified', 'role:dosen|admin']);
+
+// Route::get('frs', function() {
+//     return view('matakuliah.matakuliah');
+// })->middleware(['auth', 'verified', 'role_or_permission:lihat-matakuliah|admin']);
 
 
 require __DIR__.'/auth.php';
