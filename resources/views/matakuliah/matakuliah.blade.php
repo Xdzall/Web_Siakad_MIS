@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tulisan') }}
+            {{ __('FRS') }}
         </h2>
     </x-slot>
 
@@ -23,13 +23,13 @@
                                 <td class="border px-4 py-2">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                     Porro, et?</td>
                                 <td class="border px-4 py-2">
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->can('lihat-matakuliah'))
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('mahasiswa'))
                                         <button type="submit"
                                             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wides">Lihat
                                         </button>
                                     @endif
 
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('mahasiswa'))
+                                    @if (auth()->user()->hasRole('admin'))
                                         <button type="submit"
                                             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wides">Edit
                                         </button>

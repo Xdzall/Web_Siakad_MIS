@@ -51,7 +51,7 @@ Route::get('mahasiswa', function() {
     return '<h1>mahasiswa</h1>';
 })->middleware(['auth', 'verified', 'role:mahasiswa|admin']);
 
-Route::get('matakuliah', function() {
+Route::get('frs', function() {
     return view('matakuliah.matakuliah');
 })->middleware(['auth', 'verified', 'role_or_permission:lihat-matakuliah|admin']);
 
