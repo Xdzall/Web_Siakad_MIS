@@ -48,6 +48,37 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Admin Routes - Grouped with prefix and name
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Index
+    Route::get('/index', function () {
+        return view('admin.index');
+    })->name('index');
+    
+    // Mahasiswa routes
+    Route::get('/mahasiswa', function () {
+        return view('admin.mahasiswa.index');
+    })->name('mahasiswa');
+    
+    // Dosen routes
+    Route::get('/dosen', function () {
+        return view('admin.dosen.index');
+    })->name('dosen');
+    
+    // Matakuliah routes
+    Route::get('/matakuliah', function () {
+        return view('admin.matakuliah.index');
+    })->name('matakuliah');
+    
+    // FRS routes
+    Route::get('/frs', function () {
+        return view('admin.frs.index');
+    })->name('frs');
+    
+    // Nanti tambahkan route untuk logout
+    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
 
 // //punya ghazali
 // Route::get('admin', function() {
