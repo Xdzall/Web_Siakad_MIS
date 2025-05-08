@@ -23,14 +23,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//punya reno
 Route::get('/dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard')->middleware(['auth', 'verified', 'role:dosen']);
 Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal')->middleware(['auth', 'verified', 'role:dosen']);
 Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs')->middleware(['auth', 'verified', 'role:dosen']);
 Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai')->middleware(['auth', 'verified', 'role:dosen']);
 
 
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/dosen', [AdminController::class, 'dosen'])->name('admin.dosen')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah', [AdminController::class, 'matakuliah'])->name('admin.matakuliah')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/frs', [AdminController::class, 'frs'])->name('admin.frs')->middleware(['auth', 'verified', 'role:admin']);
 
 
 Route::get('/mahasiswa', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard')->middleware(['auth', 'verified', 'role:mahasiswa']);
@@ -48,36 +51,36 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Routes - Grouped with prefix and name
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Index
-    Route::get('/index', function () {
-        return view('admin.index');
-    })->name('index');
+// // Admin Routes - Grouped with prefix and name
+// Route::prefix('admin')->name('admin.')->group(function () {
+//     // Index
+//     Route::get('/index', function () {
+//         return view('admin.index');
+//     })->name('index');
     
-    // Mahasiswa routes
-    Route::get('/mahasiswa', function () {
-        return view('admin.mahasiswa.index');
-    })->name('mahasiswa');
+//     // Mahasiswa routes
+//     Route::get('/mahasiswa', function () {
+//         return view('admin.mahasiswa.index');
+//     })->name('mahasiswa');
     
-    // Dosen routes
-    Route::get('/dosen', function () {
-        return view('admin.dosen.index');
-    })->name('dosen');
+//     // Dosen routes
+//     Route::get('/dosen', function () {
+//         return view('admin.dosen.index');
+//     })->name('dosen');
     
-    // Matakuliah routes
-    Route::get('/matakuliah', function () {
-        return view('admin.matakuliah.index');
-    })->name('matakuliah');
+//     // Matakuliah routes
+//     Route::get('/matakuliah', function () {
+//         return view('admin.matakuliah.index');
+//     })->name('matakuliah');
     
-    // FRS routes
-    Route::get('/frs', function () {
-        return view('admin.frs.index');
-    })->name('frs');
+//     // FRS routes
+//     Route::get('/frs', function () {
+//         return view('admin.frs.index');
+//     })->name('frs');
     
-    // Nanti tambahkan route untuk logout
-    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
+//     // Nanti tambahkan route untuk logout
+//     // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// });
 
 
 // //punya ghazali

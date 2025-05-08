@@ -36,7 +36,7 @@
 
 
                         @auth
-                            <a href="{{ url('/dashboard') }}"
+                            <a href="{{ url('/MIS') }}"
                                 class="font-semibold text-blue-400 hover:text-blue-600 focus:outline focus:outline-2 focus:rounded-sm focus:outline-blue-500">Dashboard</a>
                         @else
                             <a href="{{ route('login') }}"

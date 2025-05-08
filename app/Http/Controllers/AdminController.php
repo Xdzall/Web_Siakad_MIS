@@ -9,9 +9,32 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function dashboard()
     {
-        //
+        return view('admin.dashboard');
+    }
+
+    public function dosen()
+    {
+        return view('admin.dosen');
+    }
+
+
+    public function mahasiswa()
+    {
+        return view('admin.mahasiswa');
+    }
+
+    public function matakuliah()
+    {
+
+        return view('admin.matakuliah');
+    }
+
+    public function frs()
+    {
+
+        return view('admin.frs');
     }
 
     /**

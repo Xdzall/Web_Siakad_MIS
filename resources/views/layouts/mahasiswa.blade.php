@@ -10,20 +10,38 @@
         <div class="text-center">
             <p class="text-lg font-semibold">Mahasiswa</p>
         </div>
-        <nav class="space-y-4">
-            <a href="{{ route('mahasiswa.dashboard') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]"> Dashboard</a>
-            <a href="{{ route('mahasiswa.jadwal') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]"> Jadwal Kuliah</a>
-            <a href="{{ route('mahasiswa.frs') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]"> FRS</a>
-            <a href="{{ route('mahasiswa.nilai') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]"> Nilai</a>
-            <a href="{{ route('profile.edit') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]"> Profil</a>
-            {{-- <a href="#" class="block py-2 px-4 text-red-400 hover:bg-red-500 hover:text-white"> Logout</a> --}}
+        <nav class="space-y-4 flex-grow">
+            <a href="{{ route('mahasiswa.dashboard') }}" 
+            class="block py-2 px-4 rounded {{ request()->routeIs('mahasiswa.dashboard') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            🏠 Dashboard
+            </a>
+            
+            <a href="{{ route('mahasiswa.jadwal') }}" 
+            class="block py-2 px-4 rounded {{ request()->routeIs('mahasiswa.jadwal') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            📚 Jadwal Kuliah
+            </a>
+            
+            <a href="{{ route('mahasiswa.frs') }}" 
+            class="block py-2 px-4 rounded {{ request()->routeIs('mahasiswa.frs') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            📚 FRS
+            </a>
+            
+            <a href="{{ route('mahasiswa.nilai') }}" 
+            class="block py-2 px-4 rounded {{ request()->routeIs('mahasiswa.nilai') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            📚 Nilai
+            </a>
+    
+            <a href="{{ route('profile.edit') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]">📚 Profil</a>
+        </nav>
+        
+        <div class="mt-auto pt-6 border-t border-gray-700">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="block py-2 px-4 text-red-400 hover:bg-red-500 hover:text-white w-full text-left">
-                    Logout
+                    ⛔ Logout
                 </button>
             </form>
-        </nav>
+        </div>
     </aside>
     <main class="flex-1 p-8 ml-64">
         @yield('content')

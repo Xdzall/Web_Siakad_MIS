@@ -11,8 +11,15 @@
     // Urutkan hari secara manual
     $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 
+    // Pastikan setiap hari memiliki koleksi kosong jika tidak ada jadwal
+    foreach ($days as $day) {
+        if (!isset($grouped[$day])) {
+            $grouped[$day] = collect();
+        }
+    }
+
     // Hitung jumlah maksimum jadwal pada satu hari
-    $maxRows = collect($days)->map(fn($d) => $grouped[$d]->count() ?? 0)->max();
+    $maxRows = collect($days)->map(fn($d) => $grouped[$d]->count())->max();
 @endphp
 
 <div class="overflow-x-auto">
