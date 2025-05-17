@@ -30,11 +30,14 @@ Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai
 
 
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth', 'verified', 'role:admin']);
-Route::get('/admin/dosen', [AdminController::class, 'dosen'])->name('admin.dosen')->middleware(['auth', 'verified', 'role:admin']);
+// Route::get('/admin/dosen', [AdminController::class, 'dosen'])->name('admin.dosen')->middleware(['auth', 'verified', 'role:admin']);
+Route::post('/admin/dosen', [AdminController::class, 'storeDosen'])->name('admin.dosen.store')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa')->middleware(['auth', 'verified', 'role:admin']);
+Route::post('/admin/mahasiswa', [AdminController::class, 'storeMahasiswa'])->name('admin.mahasiswa.store')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/matakuliah', [AdminController::class, 'matakuliah'])->name('admin.matakuliah')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/frs', [AdminController::class, 'frs'])->name('admin.frs')->middleware(['auth', 'verified', 'role:admin']);
-
+Route::get('/admin/dosen/create', [AdminController::class, 'create'])->name('admin.dosen.create')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/dosen', [AdminController::class, 'dosenIndex'])->name('admin.dosen.index')->middleware(['auth', 'verified', 'role:admin']);
 
 Route::get('/mahasiswa', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard')->middleware(['auth', 'verified', 'role:mahasiswa']);
 Route::get('/mahasiswa/jadwal', [MahasiswaController::class, 'jadwal'])->name('mahasiswa.jadwal')->middleware(['auth', 'verified', 'role:mahasiswa']);

@@ -23,7 +23,7 @@
             🧑‍🎓 Mahasiswa
             </a>
             
-            <a href="{{ route('admin.dosen') }}" 
+            <a href="{{ route('admin.dosen.index') }}" 
             class="block py-2 px-4 rounded {{ request()->routeIs('admin.dosen') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
             👨‍🏫 Dosen
             </a>

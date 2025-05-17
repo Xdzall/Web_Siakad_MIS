@@ -1,25 +1,43 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="bg-white rounded-lg shadow-lg p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Data Dosen</h1>
-        
-        <div class="mb-4">
-            <a href="" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Tambah Dosen</a>
-        </div>
+<div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Data Dosen</h1>
+        <a href="{{ route('admin.dosen.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            + Tambah Dosen
+        </a>
+    </div>
 
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="py-2 px-4 border-b">NIP</th>
-                    <th class="py-2 px-4 border-b">Nama</th>
-                    <th class="py-2 px-4 border-b">Email</th>
-                    <th class="py-2 px-4 border-b">Action</th>
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 text-sm text-left">
+            <thead class="bg-gray-100 text-gray-700 uppercase">
+                <tr>
+                    <th class="py-3 px-4 border">NIP</th>
+                    <th class="py-3 px-4 border">Nama</th>
+                    <th class="py-3 px-4 border">Email</th>
+                    <th class="py-3 px-4 border text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                
+                @forelse ($dosen as $d)
+                <tr class="hover:bg-gray-50">
+                    <td class="py-2 px-4 border">{{ $d->nip }}</td>
+                    <td class="py-2 px-4 border">{{ $d->name }}</td>
+                    <td class="py-2 px-4 border">{{ $d->email }}</td>
+                    <td class="py-2 px-4 border text-center">
+                        <!-- Aksi edit/delete bisa ditambahkan di sini -->
+                        <a href="#" class="text-blue-600 hover:underline">Edit</a> |
+                        <a href="#" class="text-red-600 hover:underline">Hapus</a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="4" class="py-3 px-4 text-center text-gray-500">Tidak ada data dosen.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+</div>
 @endsection

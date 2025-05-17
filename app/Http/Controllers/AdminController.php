@@ -2,10 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+
+    public function storeDosen(Request $request)
+    {
+        $request->validate([
+            'nip' => 'required|unique:users',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        $user = User::create([
+            'nip' => $request->nip,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->assignRole('dosen');
+
+        return redirect()->back()->with('success', 'Dosen berhasil ditambahkan');
+    }
+
+    public function storeMahasiswa(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->assignRole('mahasiswa');
+
+        return redirect()->back()->with('success', 'Mahasiswa berhasil ditambahkan');
+    }
+
+    public function dosenIndex()
+    {
+        $dosen = User::role('dosen')->get(); // Mengambil semua user dengan role dosen
+        return view('admin.dosen.index', compact('dosen'));
+    }
+
+    
     /**
      * Display a listing of the resource.
      */
@@ -13,12 +61,6 @@ class AdminController extends Controller
     {
         return view('admin.dashboard');
     }
-
-    public function dosen()
-    {
-        return view('admin.dosen');
-    }
-
 
     public function mahasiswa()
     {
@@ -41,9 +83,9 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        //
-    }
+{
+    return view('admin.dosen.create');
+}
 
     /**
      * Store a newly created resource in storage.
