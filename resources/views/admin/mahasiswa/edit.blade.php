@@ -2,25 +2,29 @@
 
 @section('content')
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Tambah Mahasiswa</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Mahasiswa</h1>
 
-        <form method="POST" action="{{ route('admin.mahasiswa.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('admin.mahasiswa.update',$mahasiswa->id) }}" class="space-y-4">
             @csrf
+            @method('PUT')
             <div>
                 <label class="block text-sm font-medium text-gray-700">NRP</label>
-                <input type="text" name="nrp" class="w-full border rounded px-3 py-2" required>
+                <input type="text" name="nrp" class="w-full border rounded px-3 py-2" required
+                    value="{{ old('nrp', $mahasiswa->nrp) }}">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Nama</label>
-                <input type="text" name="name" class="w-full border rounded px-3 py-2" required>
+                <input type="text" name="name" class="w-full border rounded px-3 py-2" required
+                    value="{{ old('name', $mahasiswa->name) }}">
             </div>
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                 <div class="flex">
-                    <input type="text" name="email_prefix" class="w-full border rounded px-3 py-2" required>
+                    <input type="text" name="email_prefix" class="w-full border rounded px-3 py-2" required
+                        value="{{ old('email_prefix', explode('@', $mahasiswa->email)[0]) }}">
                     <span class="bg-gray-300 p-3 border rounded-r-lg text-gray-700">@it.student.pens.ac.id</span>
                 </div>
-                    <input type="hidden" id="email" name="email">
+                <input type="hidden" id="email" name="email">
             </div>
             <div class="relative">
                 <label class="block text-sm font-medium text-gray-700">Password</label>
@@ -58,6 +62,7 @@
                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
                 }
             </script>
+
             <div class="flex justify-between items-center">
                 <a href="{{ route('admin.mahasiswa.index') }}" class="text-sm text-gray-600 hover:underline">← Kembali</a>
                 <button type="submit" class="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600">

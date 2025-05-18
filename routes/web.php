@@ -45,6 +45,10 @@ Route::get('/admin/dosen/{id}/edit', [AdminController::class, 'editDosen'])->nam
 Route::put('/admin/dosen/{id}', [AdminController::class, 'updateDosen'])->name('admin.dosen.update')->middleware(['auth', 'verified', 'role:admin']);
 Route::delete('/admin/dosen/{id}', [AdminController::class, 'destroyDosen'])->name('admin.dosen.destroy')->middleware(['auth', 'verified', 'role:admin']);
 
+Route::get('/admin/mahasiswa/{id}/edit', [AdminController::class, 'editMahasiswa'])->name('admin.mahasiswa.edit')->middleware(['auth', 'verified', 'role:admin']);
+Route::put('/admin/mahasiswa/{id}', [AdminController::class, 'updateMahasiswa'])->name('admin.mahasiswa.update')->middleware(['auth', 'verified', 'role:admin']);
+Route::delete('/admin/mahasiswa/{id}', [AdminController::class, 'destroyMahasiswa'])->name('admin.mahasiswa.destroy')->middleware(['auth', 'verified', 'role:admin']);
+
 Route::get('/mahasiswa', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard')->middleware(['auth', 'verified', 'role:mahasiswa']);
 Route::get('/mahasiswa/jadwal', [MahasiswaController::class, 'jadwal'])->name('mahasiswa.jadwal')->middleware(['auth', 'verified', 'role:mahasiswa']);
 Route::get('/mahasiswa/frs', [MahasiswaController::class, 'frs'])->name('mahasiswa.frs')->middleware(['auth', 'verified', 'role:mahasiswa']);
