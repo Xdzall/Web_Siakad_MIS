@@ -18,7 +18,7 @@
             🏠 Overview
             </a>
             
-            <a href="{{ route('admin.mahasiswa') }}" 
+            <a href="{{ route('admin.mahasiswa.index') }}" 
             class="block py-2 px-4 rounded {{ request()->routeIs('admin.mahasiswa') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
             🧑‍🎓 Mahasiswa
             </a>
