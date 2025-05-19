@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Models\Matakuliah;
 
 class AdminController extends Controller
 {
@@ -174,8 +175,40 @@ class AdminController extends Controller
 
     public function matakuliah()
     {
-        return view('admin.matakuliah');
+        return view('admin.matakuliah.index');
     }
+
+    ## Dibuat oleh Prof. Reno
+    public function storeMatakuliah(Request $request)
+    {
+        $request->validate([
+            'kode' => 'required|unique:matakuliah,kode',
+            'nama' => 'required|string|max:100',
+            'dosen_id' => 'required|exists:users,id', // Asumsikan dosen disimpan di tabel users
+            'kelas' => 'required|string|max:10',
+            'sks' => 'required|integer|min:1|max:6',
+            'jadwal' => 'required|string', // atau bisa jadi datetime tergantung implementasi
+            'ruang' => 'required|string|max:50',
+        ]);
+
+        Matakuliah::create([
+            'kode' => $request->kode,
+            'nama' => $request->nama,
+            'dosen_id' => $request->dosen_id,
+            'kelas' => $request->kelas,
+            'sks' => $request->sks,
+            'jadwal' => $request->jadwal,
+            'ruang' => $request->ruang,
+        ]);
+
+        return redirect()->route('admin.matakuliah.index')->with('success', 'Matakuliah berhasil ditambahkan');
+    }
+
+    public function createMatakuliah()
+    {
+        return view('admin.matakuliah.create');
+    }
+
 
     public function frs()
     {

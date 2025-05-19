@@ -28,7 +28,7 @@
             👨‍🏫 Dosen
             </a>
             
-            <a href="{{ route('admin.matakuliah') }}" 
+            <a href="{{ route('admin.matakuliah.index') }}" 
             class="block py-2 px-4 rounded {{ request()->routeIs('admin.matakuliah') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
             📚 Matakuliah
             </a>

@@ -40,6 +40,9 @@ Route::get('/admin/dosen/create', [AdminController::class, 'create'])->name('adm
 Route::get('/admin/dosen', [AdminController::class, 'dosenIndex'])->name('admin.dosen.index')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/mahasiswa', [AdminController::class, 'mahasiswaIndex'])->name('admin.mahasiswa.index')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/mahaiswa/create', [AdminController::class, 'createMahasiswa'])->name('admin.mahasiswa.create')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah', [AdminController::class, 'matakuliah'])->name('admin.matakuliah.index')->middleware(['auth', 'verified', 'role:admin']);
+Route::post('/admin/matakuliah', [AdminController::class, 'storeMatakuliah'])->name('admin.matakuliah.store')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah/create', [AdminController::class, 'createMatakuliah'])->name('admin.matakuliah.create')->middleware(['auth', 'verified', 'role:admin']);
 
 Route::get('/admin/dosen/{id}/edit', [AdminController::class, 'editDosen'])->name('admin.dosen.edit')->middleware(['auth', 'verified', 'role:admin']);
 Route::put('/admin/dosen/{id}', [AdminController::class, 'updateDosen'])->name('admin.dosen.update')->middleware(['auth', 'verified', 'role:admin']);
