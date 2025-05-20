@@ -10,6 +10,33 @@
             </a>
         </div>
 
+        <div class="mb-6">
+            <form action="{{ route('admin.mahasiswa.index') }}" method="GET" class="flex gap-4">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                    <select name="kelas" class="w-full border rounded px-3 py-2" onchange="this.form.submit()">
+                        <option value="">Semua Kelas</option>
+                        @foreach ($kelas as $k)
+                            <option value="{{ $k->id }}" {{ request('kelas') == $k->id ? 'selected' : '' }}>
+                                {{ $k->nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                    <select name="semester" class="w-full border rounded px-3 py-2" onchange="this.form.submit()">
+                        <option value="">Semua Semester</option>
+                        @for ($i = 1; $i <= 8; $i++)
+                            <option value="{{ $i }}" {{ request('semester') == $i ? 'selected' : '' }}>
+                                Semester {{ $i }}
+                            </option>
+                        @endfor
+                    </select>
+                </div>
+            </form>
+        </div>
+
         <div class="overflow-x-auto">
             <table class="min-w-full border border-gray-200 text-sm text-left">
                 <thead class="bg-gray-100 text-gray-700 uppercase">

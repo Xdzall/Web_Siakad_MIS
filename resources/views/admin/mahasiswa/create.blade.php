@@ -20,7 +20,21 @@
                     <input type="text" name="email_prefix" class="w-full border rounded px-3 py-2" required>
                     <span class="bg-gray-300 p-3 border rounded-r-lg text-gray-700">@it.student.pens.ac.id</span>
                 </div>
-                    <input type="hidden" id="email" name="email">
+                <input type="hidden" id="email" name="email">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Semester</label>
+                <input type="number" name="semester" class="w-full border rounded px-3 py-2" min="1" max="8"
+                    required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Kelas</label>
+                <select name="kelas_id" class="w-full border rounded px-3 py-2" required>
+                    <option value="">Pilih Kelas</option>
+                    @foreach ($kelas as $k)
+                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="relative">
                 <label class="block text-sm font-medium text-gray-700">Password</label>
