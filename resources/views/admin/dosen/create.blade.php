@@ -29,7 +29,7 @@
                 <label class="flex items-center">
                     <input type="checkbox" name="is_wali" value="1" {{-- Tambahkan value --}}
                         class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                        {{ old('is_wali', $dosen->is_wali) ? 'checked' : '' }}>
+                        {{ old('is_wali') ? 'checked' : '' }}>
                     <span class="ml-2 text-sm text-gray-600">Dosen Wali</span>
                 </label>
             </div>
