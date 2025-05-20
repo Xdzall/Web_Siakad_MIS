@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Matakuliah extends Model
 {
     protected $fillable = [
-        'kode', 'nama', 'dosen_id', 'kelas', 'sks', 'jadwal', 'ruang'
+        'kode',
+        'nama', 
+        'dosen_id',
+        'kelas',
+        'sks',
+        'jadwal',
+        'ruang'
     ];
 
     public function dosen()
@@ -16,12 +21,12 @@ class Matakuliah extends Model
         return $this->belongsTo(User::class, 'dosen_id');
     }
 
-    public function kelas()
+    public function kelasRelasi()
     {
         return $this->belongsTo(Kelas::class, 'kelas');
     }
 
-    public function jadwal()
+    public function jadwalKuliah()
     {
         return $this->belongsTo(JadwalKuliah::class, 'jadwal');
     }

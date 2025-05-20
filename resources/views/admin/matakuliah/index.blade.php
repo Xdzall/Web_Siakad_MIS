@@ -28,11 +28,11 @@
                         <td class="py-2 px-4 border-b">{{ $mk->kode }}</td>
                         <td class="py-2 px-4 border-b">{{ $mk->nama }}</td>
                         <td class="py-2 px-4 border-b">{{ $mk->dosen->name ?? '-' }}</td>
-                        <td class="py-2 px-4 border-b text-center">{{ $mk->kelas->nama ?? '-' }}</td>
+                        <td class="py-2 px-4 border-b text-center">{{ $mk->kelasRelasi->nama ?? '-' }}</td>
                         <td class="py-2 px-4 border-b text-center">{{ $mk->sks }}</td>
                         <td class="py-2 px-4 border-b text-center">
-                            @if ($mk->jadwal)
-                                {{ $mk->jadwal ?? '-' }} {{ $mk->jadwal ?? '-' }}
+                            @if ($mk->jadwalKuliah)
+                                {{ $mk->jadwalKuliah->hari }} - {{ $mk->jadwalKuliah->waktu }}
                             @else
                                 -
                             @endif

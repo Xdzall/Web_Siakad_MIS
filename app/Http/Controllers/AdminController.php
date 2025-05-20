@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Matakuliah;
 use App\Models\Kelas;
 use App\Models\JadwalKuliah;
+use Illuminate\Support\Facades\Log;
+
 
 class AdminController extends Controller
 {
@@ -54,6 +56,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $email,
             'password' => Hash::make($request->password),
+            'is_wali' => $request->has('is_wali') ? true : false,
         ]);
         $user->assignRole('dosen');
 
@@ -91,32 +94,49 @@ class AdminController extends Controller
     }
 
     // Update dosen
-    public function updateDosen(Request $request, $id)
-    {
-        $dosen = User::findOrFail($id);
+public function updateDosen(Request $request, $id)
+{
+    $dosen = User::findOrFail($id);
 
-        $request->validate([
-            'nip' => 'required|unique:users,nip,' . $dosen->id,
-            'name' => 'required',
-            'email_prefix' => 'required|alpha_dash|unique:users,email,' . $dosen->id,
-        ]);
+    $request->validate([
+        'nip' => 'required|unique:users,nip,' . $dosen->id,
+        'name' => 'required',
+        'email_prefix' => 'required|alpha_dash|unique:users,email,' . $dosen->id,
+    ]);
 
-        $email = strtolower($request->email_prefix) . '@it.lecturer.pens.ac.id';
+    $email = strtolower($request->email_prefix) . '@it.lecturer.pens.ac.id';
 
-        $data = [
-            'nip' => $request->nip,
-            'name' => $request->name,
-            'email' => $email,
-        ];
+    // Debug untuk melihat nilai yang diterima
+    Log::info('Update Dosen Request:', [
+        'is_wali_request' => $request->has('is_wali'),
+        'all_data' => $request->all()
+    ]);
 
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
+    $data = [
+        'nip' => $request->nip,
+        'name' => $request->name,
+        'email' => $email,
+        'is_wali' => $request->has('is_wali') ? true : false  // Pastikan konversi ke boolean
+    ];
 
-        $dosen->update($data);
-
-        return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil diupdate');
+    if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);
     }
+
+    // Debug sebelum update
+    Log::info('Data yang akan diupdate:', $data);
+
+    $updated = $dosen->update($data);
+
+    // Debug setelah update
+    Log::info('Status update:', [
+        'success' => $updated,
+        'new_is_wali_status' => $dosen->fresh()->is_wali
+    ]);
+
+    return redirect()->route('admin.dosen.index')
+        ->with('success', 'Data dosen berhasil diupdate');
+}
 
     // Hapus dosen
     public function destroyDosen($id)
@@ -177,26 +197,28 @@ class AdminController extends Controller
 
     public function matakuliah()
     {
-        $matakuliah = Matakuliah::with(['dosen', 'kelas', 'jadwal'])->get();
+        $matakuliah = Matakuliah::with(['dosen', 'kelasRelasi', 'jadwalKuliah'])->get();
         $dosen = User::role('dosen')->get();
         $kelas = Kelas::all();
         $jadwal = JadwalKuliah::all();
         return view('admin.matakuliah.index', compact('matakuliah', 'dosen', 'kelas', 'jadwal'));
     }
 
-    ## Dibuat oleh Prof. Reno
+
     public function storeMatakuliah(Request $request)
     {
+        // Validasi input
         $request->validate([
             'kode' => 'required|unique:matakuliahs,kode',
             'nama' => 'required|string|max:100',
-            'dosen_id' => 'required|exists:users,id', // Asumsikan dosen disimpan di tabel users
+            'dosen_id' => 'required|exists:users,id',
             'kelas' => 'required|exists:kelas,id',
             'sks' => 'required|integer|min:1|max:6',
             'jadwal' => 'required|exists:jadwal_kuliahs,id',
-            'ruang' => 'required|string|max:50',
+            'ruang' => 'required|string|max:50'
         ]);
 
+        // Buat record mata kuliah baru
         Matakuliah::create([
             'kode' => $request->kode,
             'nama' => $request->nama,
@@ -204,10 +226,12 @@ class AdminController extends Controller
             'kelas' => $request->kelas,
             'sks' => $request->sks,
             'jadwal' => $request->jadwal,
-            'ruang' => $request->ruang,
+            'ruang' => $request->ruang
         ]);
 
-        return redirect()->route('admin.matakuliah.index')->with('success', 'Matakuliah berhasil ditambahkan');
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.matakuliah.index')
+            ->with('success', 'Matakuliah berhasil ditambahkan');
     }
 
     public function createMatakuliah()

@@ -16,6 +16,7 @@
                         <th class="py-3 px-4 border">NIP</th>
                         <th class="py-3 px-4 border">Nama</th>
                         <th class="py-3 px-4 border">Email</th>
+                        <th class="py-3 px-4 border text-center">Status Wali</th>
                         <th class="py-3 px-4 border text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -25,6 +26,19 @@
                             <td class="py-2 px-4 border">{{ $d->nip }}</td>
                             <td class="py-2 px-4 border">{{ $d->name }}</td>
                             <td class="py-2 px-4 border">{{ $d->email }}</td>
+                            <td class="py-2 px-4 border text-center">
+                                @if ($d->is_wali)
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Dosen Wali
+                                    </span>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        Dosen Biasa
+                                    </span>
+                                @endif
+                            </td>
                             <td class="py-2 px-4 border text-center">
                                 <a href="{{ route('admin.dosen.edit', $d->id) }}"
                                     class="text-blue-600 hover:underline">Edit</a> |
@@ -39,7 +53,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="py-3 px-4 text-center text-gray-500">Tidak ada data dosen.</td>
+                            <td colspan="5" class="py-3 px-4 text-center text-gray-500">Tidak ada data dosen.</td>
                         </tr>
                     @endforelse
                 </tbody>

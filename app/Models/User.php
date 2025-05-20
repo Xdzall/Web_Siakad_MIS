@@ -23,8 +23,14 @@ class User extends Authenticatable
         'password',
         'nip',
         'nrp',
+        'is_wali',
     ];
 
+
+    public function isWali()
+    {
+        return $this->is_wali;
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

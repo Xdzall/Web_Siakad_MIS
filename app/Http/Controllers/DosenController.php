@@ -17,7 +17,27 @@ class DosenController extends Controller
 
     public function frs()
     {
+        // Hanya dosen wali yang bisa mengakses halaman FRS
+        if (!auth()->user()->is_wali) {
+            return redirect()->route('dosen.dashboard')
+                ->with('error', 'Hanya dosen wali yang dapat mengakses halaman FRS');
+        }
+
+        // Tampilkan FRS untuk mahasiswa yang diampu
         return view('dosen.frs');
+    }
+
+    public function accFrs(Request $request, $id)
+    {
+        if (!auth()->user()->is_wali) {
+            return redirect()->back()
+                ->with('error', 'Anda tidak memiliki akses untuk menyetujui FRS');
+        }
+
+        // Proses persetujuan FRS
+        // ...
+
+        return redirect()->back()->with('success', 'FRS berhasil disetujui');
     }
 
 

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Tambah Dosen</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Dosen</h1>
 
         <form method="POST" action="{{ route('admin.dosen.update', $dosen->id) }}" class="space-y-4">
             @csrf
@@ -25,7 +25,14 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" name="password" class="w-full border rounded px-3 py-2" required>
+                <input type="password" name="password" class="w-full border rounded px-3 py-2">
+                <p class="mt-1 text-sm text-gray-500">Biarkan kosong jika tidak ingin mengubah password</p>
+            </div>
+            <div>
+                <label class="flex items-center">
+                    <input type="checkbox" name="is_wali" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" {{ $dosen->is_wali ? 'checked' : '' }}>
+                    <span class="ml-2 text-sm text-gray-600">Dosen Wali</span>
+                </label>
             </div>
             <div class="flex justify-between items-center">
                 <a href="{{ route('admin.dosen.index') }}" class="text-sm text-gray-600 hover:underline">← Kembali</a>

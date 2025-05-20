@@ -26,7 +26,10 @@ Route::get('/', function () {
 
 Route::get('/dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard')->middleware(['auth', 'verified', 'role:dosen']);
 Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal')->middleware(['auth', 'verified', 'role:dosen']);
-Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs')->middleware(['auth', 'verified', 'role:dosen']);
+Route::middleware(['auth', 'verified', 'role:dosen', 'dosen.wali'])->group(function () {
+    Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs')->middleware(['auth', 'verified', 'role:dosen']);
+    Route::post('/dosen/frs/{id}/acc', [DosenController::class, 'accFrs'])->name('dosen.frs.acc')->middleware(['auth', 'verified', 'role:dosen']);
+});
 Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai')->middleware(['auth', 'verified', 'role:dosen']);
 
 
@@ -84,27 +87,27 @@ Route::middleware('auth')->group(function () {
 //     Route::get('/index', function () {
 //         return view('admin.index');
 //     })->name('index');
-    
+
 //     // Mahasiswa routes
 //     Route::get('/mahasiswa', function () {
 //         return view('admin.mahasiswa.index');
 //     })->name('mahasiswa');
-    
+
 //     // Dosen routes
 //     Route::get('/dosen', function () {
 //         return view('admin.dosen.index');
 //     })->name('dosen');
-    
+
 //     // Matakuliah routes
 //     Route::get('/matakuliah', function () {
 //         return view('admin.matakuliah.index');
 //     })->name('matakuliah');
-    
+
 //     // FRS routes
 //     Route::get('/frs', function () {
 //         return view('admin.frs.index');
 //     })->name('frs');
-    
+
 //     // Nanti tambahkan route untuk logout
 //     // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // });
@@ -128,4 +131,4 @@ Route::middleware('auth')->group(function () {
 // })->middleware(['auth', 'verified', 'role_or_permission:lihat-matakuliah|admin']);
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
