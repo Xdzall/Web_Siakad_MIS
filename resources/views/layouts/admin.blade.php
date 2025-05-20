@@ -33,9 +33,9 @@
             📚 Matakuliah
             </a>
             
-            <a href="{{ route('admin.frs') }}" 
+            <a href="{{ route('admin.kelas.index') }}" 
             class="block py-2 px-4 rounded {{ request()->routeIs('admin.frs') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
-            📑 FRS
+            📑 Kelas
             </a>
             <a href="{{ route('profile.edit') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]"> Profil</a>
         </nav>

@@ -1,22 +1,40 @@
 <?php
-
-namespace Database\Seeders;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\JadwalKuliah;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $data = [
+            'Senin 08:00-09:40',
+            'Senin 10:00-11:40',
+            'Senin 13:00-14:40',
+            'Senin 15:00-16:40',
+            'Selasa 08:00-09:40',
+            'Selasa 10:00-11:40',
+            'Selasa 13:00-14:40',
+            'Selasa 15:00-16:40',
+            'Rabu 08:00-09:40',
+            'Rabu 10:00-11:40',
+            'Rabu 13:00-14:40',
+            'Rabu 15:00-16:40',
+            'Kamis 08:00-09:40',
+            'Kamis 10:00-11:40',
+            'Kamis 13:00-14:40',
+            'Kamis 15:00-16:40',
+            'Jumat 08:00-09:40',
+            'Jumat 10:00-11:40',
+            'Jumat 13:00-14:40',
+            'Jumat 15:00-16:40',
+        ];
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($data as $jadwal) {
+            [$hari, $waktu] = explode(' ', $jadwal, 2);
+            JadwalKuliah::create([
+                'hari' => $hari,
+                'waktu' => $waktu,
+            ]);
+        }
     }
 }

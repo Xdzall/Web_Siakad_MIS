@@ -18,14 +18,18 @@
                 <label class="block text-sm font-medium text-gray-700">Dosen Pengajar</label>
                 <select name="dosen_id" class="w-full border rounded px-3 py-2" required>
                     <option value="" disabled selected>-- Pilih Dosen --</option>
-                    <!-- Data dosen akan diisi nanti -->
+                    @foreach ($dosen as $d)
+                        <option value="{{ $d->id }}">{{ $d->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Kelas</label>
                 <select name="kelas" class="w-full border rounded px-3 py-2" required>
                     <option value="" disabled selected>-- Pilih Kelas --</option>
-                    <!-- Data kelas akan diisi nanti -->
+                    @foreach ($kelas as $k)
+                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                    @endforeach
                 </select>
             </div>
             <div>
@@ -36,15 +40,14 @@
                 <label class="block text-sm font-medium text-gray-700">Jadwal</label>
                 <select name="jadwal" class="w-full border rounded px-3 py-2" required>
                     <option value="" disabled selected>-- Pilih Jadwal --</option>
-                    <!-- Data jadwal akan diisi nanti -->
+                    @foreach ($jadwal as $j)
+                        <option value="{{ $j->id }}">{{ $j->hari }} - {{ $j->waktu }}</option>
+                    @endforeach
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Ruang</label>
-                <select name="ruang" class="w-full border rounded px-3 py-2" required>
-                    <option value="" disabled selected>-- Pilih Ruang --</option>
-                    <!-- Data ruang akan diisi nanti -->
-                </select>
+                <label class="block text-sm font-medium text-gray-700">Ruangan</label>
+                <input type="text" name="ruang" class="w-full border rounded px-3 py-2" required>
             </div>
             <div class="flex justify-between items-center">
                 <a href="{{ route('admin.matakuliah.index') }}" class="text-sm text-gray-600 hover:underline">← Kembali</a>

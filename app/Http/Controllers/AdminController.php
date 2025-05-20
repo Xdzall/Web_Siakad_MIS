@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Matakuliah;
+use App\Models\Kelas;
+use App\Models\JadwalKuliah;
 
 class AdminController extends Controller
 {
@@ -175,19 +177,23 @@ class AdminController extends Controller
 
     public function matakuliah()
     {
-        return view('admin.matakuliah.index');
+        $matakuliah = Matakuliah::with(['dosen', 'kelas', 'jadwal'])->get();
+        $dosen = User::role('dosen')->get();
+        $kelas = Kelas::all();
+        $jadwal = JadwalKuliah::all();
+        return view('admin.matakuliah.index', compact('matakuliah', 'dosen', 'kelas', 'jadwal'));
     }
 
     ## Dibuat oleh Prof. Reno
     public function storeMatakuliah(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:matakuliah,kode',
+            'kode' => 'required|unique:matakuliahs,kode',
             'nama' => 'required|string|max:100',
             'dosen_id' => 'required|exists:users,id', // Asumsikan dosen disimpan di tabel users
-            'kelas' => 'required|string|max:10',
+            'kelas' => 'required|exists:kelas,id',
             'sks' => 'required|integer|min:1|max:6',
-            'jadwal' => 'required|string', // atau bisa jadi datetime tergantung implementasi
+            'jadwal' => 'required|exists:jadwal_kuliahs,id',
             'ruang' => 'required|string|max:50',
         ]);
 
@@ -206,12 +212,9 @@ class AdminController extends Controller
 
     public function createMatakuliah()
     {
-        return view('admin.matakuliah.create');
-    }
-
-
-    public function frs()
-    {
-        return view('admin.frs');
+        $dosen = User::role('dosen')->get();
+        $kelas = Kelas::all();
+        $jadwal = JadwalKuliah::all();
+        return view('admin.matakuliah.create', compact('dosen', 'kelas', 'jadwal'));
     }
 }

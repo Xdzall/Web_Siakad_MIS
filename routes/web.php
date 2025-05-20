@@ -6,6 +6,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\JadwalKuliahController;
 
 /*
@@ -30,9 +31,7 @@ Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai
 
 
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth', 'verified', 'role:admin']);
-// Route::get('/admin/dosen', [AdminController::class, 'dosen'])->name('admin.dosen')->middleware(['auth', 'verified', 'role:admin']);
 Route::post('/admin/dosen', [AdminController::class, 'storeDosen'])->name('admin.dosen.store')->middleware(['auth', 'verified', 'role:admin']);
-// Route::get('/admin/mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa')->middleware(['auth', 'verified', 'role:admin']);
 Route::post('/admin/mahasiswa', [AdminController::class, 'storeMahasiswa'])->name('admin.mahasiswa.store')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/matakuliah', [AdminController::class, 'matakuliah'])->name('admin.matakuliah')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/frs', [AdminController::class, 'frs'])->name('admin.frs')->middleware(['auth', 'verified', 'role:admin']);
@@ -40,13 +39,25 @@ Route::get('/admin/dosen/create', [AdminController::class, 'create'])->name('adm
 Route::get('/admin/dosen', [AdminController::class, 'dosenIndex'])->name('admin.dosen.index')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/mahasiswa', [AdminController::class, 'mahasiswaIndex'])->name('admin.mahasiswa.index')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/mahaiswa/create', [AdminController::class, 'createMahasiswa'])->name('admin.mahasiswa.create')->middleware(['auth', 'verified', 'role:admin']);
+
 Route::get('/admin/matakuliah', [AdminController::class, 'matakuliah'])->name('admin.matakuliah.index')->middleware(['auth', 'verified', 'role:admin']);
 Route::post('/admin/matakuliah', [AdminController::class, 'storeMatakuliah'])->name('admin.matakuliah.store')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/matakuliah/create', [AdminController::class, 'createMatakuliah'])->name('admin.matakuliah.create')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah/{id}/edit', [AdminController::class, 'editMatakuliah'])->name('admin.matakuliah.edit')->middleware(['auth', 'verified', 'role:admin']);
+Route::put('/admin/matakuliah/{id}', [AdminController::class, 'updateMatakuliah'])->name('admin.matakuliah.update')->middleware(['auth', 'verified', 'role:admin']);
+Route::delete('/admin/matakuliah/{id}', [AdminController::class, 'destroyMatakuliah'])->name('admin.matakuliah.destroy')->middleware(['auth', 'verified', 'role:admin']);
 
 Route::get('/admin/dosen/{id}/edit', [AdminController::class, 'editDosen'])->name('admin.dosen.edit')->middleware(['auth', 'verified', 'role:admin']);
 Route::put('/admin/dosen/{id}', [AdminController::class, 'updateDosen'])->name('admin.dosen.update')->middleware(['auth', 'verified', 'role:admin']);
 Route::delete('/admin/dosen/{id}', [AdminController::class, 'destroyDosen'])->name('admin.dosen.destroy')->middleware(['auth', 'verified', 'role:admin']);
+
+Route::get('/admin/kelas', [KelasController::class, 'index'])->name('admin.kelas.index')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/kelas/create', [KelasController::class, 'create'])->name('admin.kelas.create')->middleware(['auth', 'verified', 'role:admin']);
+Route::post('/admin/kelas', [KelasController::class, 'store'])->name('admin.kelas.store')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/kelas/{id}/edit', [KelasController::class, 'edit'])->name('admin.kelas.edit')->middleware(['auth', 'verified', 'role:admin']);
+Route::put('/admin/kelas/{id}', [KelasController::class, 'update'])->name('admin.kelas.update')->middleware(['auth', 'verified', 'role:admin']);
+Route::delete('/admin/kelas/{id}', [KelasController::class, 'destroy'])->name('admin.kelas.destroy')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/kelas/{id}/show', [KelasController::class, 'show'])->name('admin.kelas.show')->middleware(['auth', 'verified', 'role:admin']);
 
 Route::get('/admin/mahasiswa/{id}/edit', [AdminController::class, 'editMahasiswa'])->name('admin.mahasiswa.edit')->middleware(['auth', 'verified', 'role:admin']);
 Route::put('/admin/mahasiswa/{id}', [AdminController::class, 'updateMahasiswa'])->name('admin.mahasiswa.update')->middleware(['auth', 'verified', 'role:admin']);
