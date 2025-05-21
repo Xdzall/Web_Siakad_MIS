@@ -6,7 +6,7 @@
     <title>Login SIAKAD MIS</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-cover bg-center relative" style="background-image: url('Login.png');">
+<body class="min-h-screen bg-cover bg-center relative" style="background-image: url('https://www.pens.ac.id/wp-content/uploads/resized/7345463906e5727c6158b24cf5b15cd9/DSC_4856.jpg')">
     <!-- Overlay hitam transparan -->
     <div class="absolute inset-0 bg-black bg-opacity-60"></div>
 
@@ -64,12 +64,12 @@
                     @if (Route::has('password.request'))
                         <a class="underline text-sm text-[#1E3A8A] hover:text-[#144a85]"
                             href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
+                            {{-- {{ __('Forgot your password?') }} --}}
                         </a>
                     @endif
 
                     <x-primary-button class="ml-3 bg-[#1E3A8A] text-white hover:bg-[#163372]">
-                        {{ __('Log in') }}
+                        {{ __('Login') }}
                     </x-primary-button>
                 </div>
             </form>

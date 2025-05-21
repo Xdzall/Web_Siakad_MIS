@@ -80,8 +80,8 @@
                     <p>Program studi yang mempelajari kelistrikan, elektronika, dan sistem kontrol.</p>
                 </div>
                 <div class="p-6 bg-white rounded-lg shadow-md border border-gray-200">
-                    <h3 class="text-xl font-bold mb-2">Manajemen Bisnis</h3>
-                    <p>Program studi yang mengajarkan pengelolaan bisnis, pemasaran, dan kewirausahaan.</p>
+                    <h3 class="text-xl font-bold mb-2">Teknik Telekomunikasi</h3>
+                    <p>Program studi yang mempelajari cara mengirim, menerima, dan mengolah data atau sinyal melalui berbagai media komunikasi.</p>
                 </div>
             </div>
         </section>
@@ -122,7 +122,7 @@
             <h2 class="text-2xl font-semibold mb-4">Kontak Akademik</h2>
             <p class="mb-2">Jika ada pertanyaan atau membutuhkan bantuan, silakan hubungi kami:</p>
             <ul class="space-y-2">
-                <li>Email: <a href="mailto:akademik@pens.ac.id" class="underline hover:text-gray-300">akademik@pens.ac.id</a></li>
+                <li>Email: <a href="mailto:renno.hangara@gmail.com" class="underline hover:text-gray-300">renno.hangara@gmail.com</a></li>
                 <li>Telepon: +62 31 5941234</li>
                 <li>Alamat: Kampus PENS, Jl. Raya ITS, Surabaya</li>
             </ul>
