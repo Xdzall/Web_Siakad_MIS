@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->foreignId('dosen_id')->constrained('users');
-            $table->boolean('active')->default(true);
+            $table->foreignId('dosen_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->boolean('active')->default(false);
+            $table->integer('semester');
+            $table->enum('tipe_semester', ['ganjil', 'genap']);
             $table->timestamps();
         });
     }
@@ -26,5 +28,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('kelas');
+        Schema::table('kelas', function (Blueprint $table) {
+            $table->dropColumn(['semester', 'tipe_semester']);
+        });
     }
 };

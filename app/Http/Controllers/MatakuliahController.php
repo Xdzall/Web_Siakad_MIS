@@ -52,6 +52,12 @@ class MatakuliahController extends Controller
             'ruang' => 'required'
         ]);
 
+        // Check if kelas is active
+        $kelas = Kelas::find($request->kelas_id);
+        if (!$kelas->active) {
+            return back()->with('error', 'Tidak dapat menambahkan matakuliah ke kelas yang tidak aktif');
+        }
+
         // Cek apakah jadwal bentrok untuk kelas yang sama
         $jadwalBentrok = Matakuliah::where('kelas_id', $request->kelas_id)
             ->where('jadwal_id', $request->jadwal_id)
