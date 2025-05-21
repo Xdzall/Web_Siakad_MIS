@@ -26,7 +26,7 @@ class User extends Authenticatable
         'nrp',
         'is_wali',
         'semester',
-        'kelas_id'
+        'kelas_id',
     ];
 
     public function kelas()

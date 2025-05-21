@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Models\Matakuliah;
 use App\Models\Kelas;
-use App\Models\JadwalKuliah;
 use Illuminate\Support\Facades\Log;
 
 
@@ -219,50 +217,4 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
-    public function matakuliah()
-    {
-        $matakuliah = Matakuliah::with(['dosen', 'kelasRelasi', 'jadwalKuliah'])->get();
-        $dosen = User::role('dosen')->get();
-        $kelas = Kelas::all();
-        $jadwal = JadwalKuliah::all();
-        return view('admin.matakuliah.index', compact('matakuliah', 'dosen', 'kelas', 'jadwal'));
-    }
-
-
-    public function storeMatakuliah(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'kode' => 'required|unique:matakuliahs,kode',
-            'nama' => 'required|string|max:100',
-            'dosen_id' => 'required|exists:users,id',
-            'kelas' => 'required|exists:kelas,id',
-            'sks' => 'required|integer|min:1|max:6',
-            'jadwal' => 'required|exists:jadwal_kuliahs,id',
-            'ruang' => 'required|string|max:50'
-        ]);
-
-        // Buat record mata kuliah baru
-        Matakuliah::create([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'dosen_id' => $request->dosen_id,
-            'kelas' => $request->kelas,
-            'sks' => $request->sks,
-            'jadwal' => $request->jadwal,
-            'ruang' => $request->ruang
-        ]);
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('admin.matakuliah.index')
-            ->with('success', 'Matakuliah berhasil ditambahkan');
-    }
-
-    public function createMatakuliah()
-    {
-        $dosen = User::role('dosen')->get();
-        $kelas = Kelas::all();
-        $jadwal = JadwalKuliah::all();
-        return view('admin.matakuliah.create', compact('dosen', 'kelas', 'jadwal'));
-    }
 }

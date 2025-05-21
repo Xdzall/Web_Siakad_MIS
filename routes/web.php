@@ -7,7 +7,9 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MatakuliahController;
 use App\Http\Controllers\JadwalKuliahController;
+use App\Models\Matakuliah;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +45,12 @@ Route::get('/admin/dosen', [AdminController::class, 'dosenIndex'])->name('admin.
 Route::get('/admin/mahasiswa', [AdminController::class, 'mahasiswaIndex'])->name('admin.mahasiswa.index')->middleware(['auth', 'verified', 'role:admin']);
 Route::get('/admin/mahaiswa/create', [AdminController::class, 'createMahasiswa'])->name('admin.mahasiswa.create')->middleware(['auth', 'verified', 'role:admin']);
 
-Route::get('/admin/matakuliah', [AdminController::class, 'matakuliah'])->name('admin.matakuliah.index')->middleware(['auth', 'verified', 'role:admin']);
-Route::post('/admin/matakuliah', [AdminController::class, 'storeMatakuliah'])->name('admin.matakuliah.store')->middleware(['auth', 'verified', 'role:admin']);
-Route::get('/admin/matakuliah/create', [AdminController::class, 'createMatakuliah'])->name('admin.matakuliah.create')->middleware(['auth', 'verified', 'role:admin']);
-Route::get('/admin/matakuliah/{id}/edit', [AdminController::class, 'editMatakuliah'])->name('admin.matakuliah.edit')->middleware(['auth', 'verified', 'role:admin']);
-Route::put('/admin/matakuliah/{id}', [AdminController::class, 'updateMatakuliah'])->name('admin.matakuliah.update')->middleware(['auth', 'verified', 'role:admin']);
-Route::delete('/admin/matakuliah/{id}', [AdminController::class, 'destroyMatakuliah'])->name('admin.matakuliah.destroy')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah', [MatakuliahController::class, 'matakuliah'])->name('admin.matakuliah.index')->middleware(['auth', 'verified', 'role:admin']);
+Route::post('/admin/matakuliah', [MatakuliahController::class, 'storeMatakuliah'])->name('admin.matakuliah.store')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah/create', [MatakuliahController::class, 'createMatakuliah'])->name('admin.matakuliah.create')->middleware(['auth', 'verified', 'role:admin']);
+Route::get('/admin/matakuliah/{id}/edit', [MatakuliahController::class, 'editMatakuliah'])->name('admin.matakuliah.edit')->middleware(['auth', 'verified', 'role:admin']);
+Route::put('/admin/matakuliah/{id}', [MatakuliahController::class, 'updateMatakuliah'])->name('admin.matakuliah.update')->middleware(['auth', 'verified', 'role:admin']);
+Route::delete('/admin/matakuliah/{id}', [MatakuliahController::class, 'destroyMatakuliah'])->name('admin.matakuliah.destroy')->middleware(['auth', 'verified', 'role:admin']);
 
 Route::get('/admin/dosen/{id}/edit', [AdminController::class, 'editDosen'])->name('admin.dosen.edit')->middleware(['auth', 'verified', 'role:admin']);
 Route::put('/admin/dosen/{id}', [AdminController::class, 'updateDosen'])->name('admin.dosen.update')->middleware(['auth', 'verified', 'role:admin']);

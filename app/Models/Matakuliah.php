@@ -10,10 +10,11 @@ class Matakuliah extends Model
         'kode',
         'nama', 
         'dosen_id',
-        'kelas',
+        'kelas_id', // Ubah dari 'kelas' ke 'kelas_id'
         'sks',
-        'jadwal',
-        'ruang'
+        'jadwal_id', // Ubah dari 'jadwal' ke 'jadwal_id'
+        'ruang',
+        'semester'
     ];
 
     public function dosen()
@@ -21,13 +22,13 @@ class Matakuliah extends Model
         return $this->belongsTo(User::class, 'dosen_id');
     }
 
-    public function kelasRelasi()
+    public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'kelas');
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
     public function jadwalKuliah()
     {
-        return $this->belongsTo(JadwalKuliah::class, 'jadwal');
+        return $this->belongsTo(JadwalKuliah::class, 'jadwal_id');
     }
 }
