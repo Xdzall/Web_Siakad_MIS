@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('nip')->nullable()->unique();
             $table->string('nrp')->nullable()->unique();
+            $table->integer('semester')->nullable();
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -30,5 +32,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['kelas_id']);
+            $table->dropColumn(['semester', 'kelas_id']);
+        });
     }
 };

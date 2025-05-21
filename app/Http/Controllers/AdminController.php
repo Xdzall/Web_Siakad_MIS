@@ -21,10 +21,28 @@ class AdminController extends Controller
     }
 
     // Tampilkan daftar mahasiswa
-    public function mahasiswaIndex()
+    public function mahasiswaIndex(Request $request)
     {
-        $mahasiswa = User::role('mahasiswa')->get();
-        return view('admin.mahasiswa.index', compact('mahasiswa'));
+        // Start with base query
+        $query = User::role('mahasiswa');
+
+        // Apply kelas filter
+        if ($request->filled('kelas')) {
+            $query->where('kelas_id', $request->kelas);
+        }
+
+        // Apply semester filter
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->semester);
+        }
+
+        // Get filtered results
+        $mahasiswa = $query->get();
+
+        // Get kelas for filter dropdown
+        $kelas = Kelas::where('active', true)->get();
+
+        return view('admin.mahasiswa.index', compact('mahasiswa', 'kelas'));
     }
 
     // Form tambah dosen
@@ -36,7 +54,9 @@ class AdminController extends Controller
     // Form tambah mahasiswa
     public function createMahasiswa()
     {
-        return view('admin.mahasiswa.create');
+
+        $kelas = Kelas::where('active', true)->get();
+        return view('admin.mahasiswa.create', compact('kelas'));
     }
 
     // Simpan dosen baru
@@ -71,6 +91,8 @@ class AdminController extends Controller
             'name' => 'required',
             'email_prefix' => 'required|alpha_dash|unique:users,email',
             'password' => 'required|min:6',
+            'semester' => 'required|integer|min:1|max:8',
+            'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         $email = strtolower($request->email_prefix) . '@it.student.pens.ac.id';
@@ -80,6 +102,8 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $email,
             'password' => Hash::make($request->password),
+            'semester' => $request->semester,
+            'kelas_id' => $request->kelas_id,
         ]);
         $user->assignRole('mahasiswa');
 
@@ -94,49 +118,49 @@ class AdminController extends Controller
     }
 
     // Update dosen
-public function updateDosen(Request $request, $id)
-{
-    $dosen = User::findOrFail($id);
+    public function updateDosen(Request $request, $id)
+    {
+        $dosen = User::findOrFail($id);
 
-    $request->validate([
-        'nip' => 'required|unique:users,nip,' . $dosen->id,
-        'name' => 'required',
-        'email_prefix' => 'required|alpha_dash|unique:users,email,' . $dosen->id,
-    ]);
+        $request->validate([
+            'nip' => 'required|unique:users,nip,' . $dosen->id,
+            'name' => 'required',
+            'email_prefix' => 'required|alpha_dash|unique:users,email,' . $dosen->id,
+        ]);
 
-    $email = strtolower($request->email_prefix) . '@it.lecturer.pens.ac.id';
+        $email = strtolower($request->email_prefix) . '@it.lecturer.pens.ac.id';
 
-    // Debug untuk melihat nilai yang diterima
-    Log::info('Update Dosen Request:', [
-        'is_wali_request' => $request->has('is_wali'),
-        'all_data' => $request->all()
-    ]);
+        // Debug untuk melihat nilai yang diterima
+        Log::info('Update Dosen Request:', [
+            'is_wali_request' => $request->has('is_wali'),
+            'all_data' => $request->all()
+        ]);
 
-    $data = [
-        'nip' => $request->nip,
-        'name' => $request->name,
-        'email' => $email,
-        'is_wali' => $request->has('is_wali') ? true : false  // Pastikan konversi ke boolean
-    ];
+        $data = [
+            'nip' => $request->nip,
+            'name' => $request->name,
+            'email' => $email,
+            'is_wali' => $request->has('is_wali') ? true : false  // Pastikan konversi ke boolean
+        ];
 
-    if ($request->filled('password')) {
-        $data['password'] = Hash::make($request->password);
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        // Debug sebelum update
+        Log::info('Data yang akan diupdate:', $data);
+
+        $updated = $dosen->update($data);
+
+        // Debug setelah update
+        Log::info('Status update:', [
+            'success' => $updated,
+            'new_is_wali_status' => $dosen->fresh()->is_wali
+        ]);
+
+        return redirect()->route('admin.dosen.index')
+            ->with('success', 'Data dosen berhasil diupdate');
     }
-
-    // Debug sebelum update
-    Log::info('Data yang akan diupdate:', $data);
-
-    $updated = $dosen->update($data);
-
-    // Debug setelah update
-    Log::info('Status update:', [
-        'success' => $updated,
-        'new_is_wali_status' => $dosen->fresh()->is_wali
-    ]);
-
-    return redirect()->route('admin.dosen.index')
-        ->with('success', 'Data dosen berhasil diupdate');
-}
 
     // Hapus dosen
     public function destroyDosen($id)

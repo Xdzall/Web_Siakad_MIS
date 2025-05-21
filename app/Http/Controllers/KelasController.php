@@ -19,7 +19,7 @@ class KelasController extends Controller
     // Form tambah kelas
     public function create()
     {
-        $dosen = User::role('dosen')->get();
+        $dosen = User::role('dosen')->where('is_wali', true)->get();
         $mahasiswa = User::role('mahasiswa')->get();
         return view('admin.kelas.create', compact('dosen', 'mahasiswa'));
     }
@@ -33,17 +33,33 @@ class KelasController extends Controller
             'mahasiswa' => 'array'
         ]);
 
+        // Check if selected dosen is wali
+        $dosen = User::findOrFail($request->dosen_id);
+        if (!$dosen->is_wali) {
+            return back()->with('error', 'Hanya dosen wali yang dapat menjadi pengampu kelas.');
+        }
+
         $kelas = Kelas::create([
             'nama' => $request->nama,
             'dosen_id' => $request->dosen_id,
+            'active' => true
         ]);
 
-        // Attach mahasiswa ke kelas (many-to-many)
+        // Check if mahasiswa already has a class
         if ($request->has('mahasiswa')) {
-            $kelas->mahasiswa()->attach($request->mahasiswa);
+            foreach ($request->mahasiswa as $mahasiswaId) {
+                $mahasiswa = User::find($mahasiswaId);
+                if ($mahasiswa->kelas_id) {
+                    return back()->with('error', "Mahasiswa {$mahasiswa->name} sudah terdaftar di kelas lain.");
+                }
+            }
+
+            // Update mahasiswa kelas_id
+            User::whereIn('id', $request->mahasiswa)->update(['kelas_id' => $kelas->id]);
         }
 
-        return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil ditambahkan');
+        return redirect()->route('admin.kelas.index')
+            ->with('success', 'Kelas berhasil ditambahkan');
     }
 
     // Form edit kelas
@@ -52,7 +68,7 @@ class KelasController extends Controller
         $kelas = Kelas::with('mahasiswa')->findOrFail($id);
         $dosen = User::role('dosen')->get();
         $mahasiswa = User::role('mahasiswa')->get();
-        return view('admin.kelas.edit', compact('kelas', 'dosen', 'matakuliah', 'mahasiswa'));
+        return view('admin.kelas.edit', compact('kelas', 'dosen', 'mahasiswa'));
     }
 
     // Update kelas
@@ -66,15 +82,37 @@ class KelasController extends Controller
             'mahasiswa' => 'array'
         ]);
 
+        // Check if selected dosen is wali
+        $dosen = User::findOrFail($request->dosen_id);
+        if (!$dosen->is_wali) {
+            return back()->with('error', 'Hanya dosen wali yang dapat menjadi pengampu kelas.');
+        }
+
         $kelas->update([
             'nama' => $request->nama,
             'dosen_id' => $request->dosen_id,
+            'active' => true
         ]);
 
-        // Sync mahasiswa ke kelas
-        $kelas->mahasiswa()->sync($request->mahasiswa ?? []);
+        // Reset kelas_id for removed students
+        User::where('kelas_id', $kelas->id)
+            ->whereNotIn('id', $request->mahasiswa ?? [])
+            ->update(['kelas_id' => null]);
 
-        return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diupdate');
+        // Update kelas_id for new students
+        if ($request->has('mahasiswa')) {
+            foreach ($request->mahasiswa as $mahasiswaId) {
+                $mahasiswa = User::find($mahasiswaId);
+                if ($mahasiswa->kelas_id && $mahasiswa->kelas_id != $kelas->id) {
+                    return back()->with('error', "Mahasiswa {$mahasiswa->name} sudah terdaftar di kelas lain.");
+                }
+            }
+
+            User::whereIn('id', $request->mahasiswa)->update(['kelas_id' => $kelas->id]);
+        }
+
+        return redirect()->route('admin.kelas.index')
+            ->with('success', 'Kelas berhasil diupdate');
     }
 
     // Hapus kelas
@@ -84,6 +122,14 @@ class KelasController extends Controller
         $kelas->mahasiswa()->detach();
         $kelas->delete();
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil dihapus');
+    }
+
+    public function observeDosenWali($kelas)
+    {
+        $dosen = User::find($kelas->dosen_id);
+        if (!$dosen || !$dosen->is_wali) {
+            $kelas->update(['active' => false]);
+        }
     }
 
     // (Opsional) Detail kelas

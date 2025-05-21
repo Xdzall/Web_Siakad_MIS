@@ -17,6 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
     protected $fillable = [
         'name',
         'email',
@@ -24,8 +25,14 @@ class User extends Authenticatable
         'nip',
         'nrp',
         'is_wali',
+        'semester',
+        'kelas_id'
     ];
 
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
+    }
 
     public function isWali()
     {

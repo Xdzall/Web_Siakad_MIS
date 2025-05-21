@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->foreignId('dosen_id')->constrained('users');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

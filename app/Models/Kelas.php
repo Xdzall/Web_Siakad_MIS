@@ -9,9 +9,14 @@ class Kelas extends Model
 {
     use HasFactory;
 
-     protected $fillable = [
+    protected $fillable = [
         'nama',
         'dosen_id',
+        'active',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean'
     ];
     public function dosen()
     {
@@ -24,5 +29,9 @@ class Kelas extends Model
     public function mahasiswa()
     {
         return $this->belongsToMany(User::class, 'kelas_mahasiswa', 'kelas_id', 'mahasiswa_id');
+    }
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
     }
 }
