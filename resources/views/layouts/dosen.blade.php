@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Dosen Panel</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body class="flex min-h-screen bg-gray-100">
     <aside class="w-64 bg-[#142358] text-white p-6 space-y-8 fixed h-full">
@@ -12,39 +14,49 @@
         </div>
         <nav class="space-y-4 flex-grow">
             <a href="{{ route('dosen.dashboard') }}" 
-            class="block py-2 px-4 rounded {{ request()->routeIs('dosen.dashboard') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
-            🏠 Dashboard
+                class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('dosen.dashboard') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+                <i data-lucide="home" class="w-5 h-5"></i> Dashboard
             </a>
-            
+
             <a href="{{ route('dosen.jadwal') }}" 
-            class="block py-2 px-4 rounded {{ request()->routeIs('dosen.jadwal') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
-            📚 Jadwal Kuliah
+                class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('dosen.jadwal') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+                <i data-lucide="calendar-days" class="w-5 h-5"></i> Jadwal Kuliah
             </a>
-            
+
             <a href="{{ route('dosen.frs') }}" 
-            class="block py-2 px-4 rounded {{ request()->routeIs('dosen.frs') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
-            📚 FRS
+                class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('dosen.frs') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+                <i data-lucide="clipboard-list" class="w-5 h-5"></i> FRS
             </a>
-            
+
             <a href="{{ route('dosen.nilai') }}" 
-            class="block py-2 px-4 rounded {{ request()->routeIs('dosen.nilai') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
-            📚 Nilai
+                class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('dosen.nilai') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+                <i data-lucide="file-bar-chart" class="w-5 h-5"></i> Nilai
             </a>
-    
-            <a href="{{ route('profile.edit') }}" class="block py-2 px-4 rounded hover:bg-[#4e81c8]">📚 Profil</a>
+
+            <a href="{{ route('profile.edit') }}" 
+                class="flex items-center gap-2 py-2 px-4 rounded hover:bg-[#4e81c8]">
+                <i data-lucide="user-cog" class="w-5 h-5"></i> Profil
+            </a>
         </nav>
         
         <div class="mt-auto pt-6 border-t border-gray-700">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="block py-2 px-4 text-red-400 hover:bg-red-500 hover:text-white w-full text-left">
-                    ⛔ Logout
+                <button type="submit"
+                    class="flex items-center gap-2 py-2 px-4 text-red-400 hover:bg-red-500 hover:text-white w-full text-left">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Logout
                 </button>
             </form>
         </div>
     </aside>
+
     <main class="flex-1 p-8 ml-64">
         @yield('content')
     </main>
+
+    <!-- Init Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

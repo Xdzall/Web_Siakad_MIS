@@ -5,7 +5,7 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Daftar Matakuliah</h1>
             <a href="{{ route('admin.matakuliah.create') }}"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-600">
                 + Tambah Matakuliah
             </a>
         </div>
@@ -38,51 +38,50 @@
             </form>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-200">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="py-3 px-4 border-b text-left w-24">Kode</th>
-                        <th class="py-3 px-4 border-b text-left w-48">Matakuliah</th>
-                        <th class="py-3 px-4 border-b text-left w-48">Dosen</th>
-                        <th class="py-3 px-4 border-b text-center w-16">SKS</th>
-                        <th class="py-3 px-4 border-b text-center w-48">Jadwal</th>
-                        <th class="py-3 px-4 border-b text-center w-24">Ruang</th>
-                        <th class="py-3 px-4 border-b text-center w-32">Aksi</th>
+        {{-- Tabel Matakuliah --}}
+        <div class="overflow-x-auto bg-white rounded-xl shadow ring-1 ring-gray-200">
+            <table class="min-w-full text-sm text-left text-gray-700">
+                <thead class="bg-blue-600 text-white text-xs uppercase sticky top-0 z-10">
+                    <tr>
+                        <th class="py-3 px-6 text-left">Kode</th>
+                        <th class="py-3 px-6 text-left">Matakuliah</th>
+                        <th class="py-3 px-6 text-left">Dosen</th>
+                        <th class="py-3 px-6 text-center">SKS</th>
+                        <th class="py-3 px-6 text-center">Jadwal</th>
+                        <th class="py-3 px-6 text-center">Ruang</th>
+                        <th class="py-3 px-6 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-100">
                     @forelse($matakuliah as $mk)
-                        <tr class="hover:bg-gray-50">
-                            <td class="py-2 px-4 border-b">{{ $mk->kode }}</td>
-                            <td class="py-2 px-4 border-b">{{ $mk->nama }}</td>
-                            <td class="py-2 px-4 border-b">{{ $mk->dosen->name }}</td>
-                            <td class="py-2 px-4 border-b text-center">{{ $mk->sks }}</td>
-                            <td class="py-2 px-4 border-b text-center">
+                        <tr class="hover:bg-gray-50 transition-all duration-200">
+                            <td class="py-4 px-6 whitespace-nowrap">{{ $mk->kode }}</td>
+                            <td class="py-4 px-6 whitespace-nowrap">{{ $mk->nama }}</td>
+                            <td class="py-4 px-6 whitespace-nowrap">{{ $mk->dosen->name }}</td>
+                            <td class="py-4 px-6 text-center">{{ $mk->sks }}</td>
+                            <td class="py-4 px-6 text-center">
                                 {{ $mk->jadwalKuliah->hari }} - {{ $mk->jadwalKuliah->waktu }}
                             </td>
-                            <td class="py-2 px-4 border-b text-center">{{ $mk->ruang }}</td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <a href="{{ route('admin.matakuliah.edit', $mk->id) }}"
-                                        class="text-blue-600 hover:underline">
-                                        Edit
-                                    </a>
-                                    <span class="text-gray-300">|</span>
-                                    <form action="{{ route('admin.matakuliah.destroy', $mk->id) }}" method="POST"
-                                        class="inline" onsubmit="return confirm('Yakin hapus matakuliah ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:underline">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </div>
+                            <td class="py-4 px-6 text-center">{{ $mk->ruang }}</td>
+                            <td class="py-4 px-6 text-center space-x-3">
+                                <a href="{{ route('admin.matakuliah.edit', $mk->id) }}"
+                                    class="text-blue-600 hover:underline font-medium">
+                                    Edit
+                                </a>
+                                <form action="{{ route('admin.matakuliah.destroy', $mk->id) }}" method="POST"
+                                    class="inline" onsubmit="return confirm('Yakin hapus matakuliah ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="text-red-600 hover:underline font-medium bg-transparent border-0 p-0 m-0 cursor-pointer">
+                                        Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-4 text-center text-gray-500">
+                            <td colspan="7" class="py-6 px-6 text-center text-gray-500">
                                 Tidak ada data matakuliah.
                             </td>
                         </tr>
