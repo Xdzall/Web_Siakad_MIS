@@ -26,6 +26,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Dosen wali routes
+Route::middleware(['auth', 'verified', 'role:dosen', 'dosen.wali'])->group(function () {
+    Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs');
+    Route::post('/dosen/frs/validate', [DosenController::class, 'validateFrs'])->name('dosen.frs.validate');
+});
+
 Route::get('/dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard')->middleware(['auth', 'verified', 'role:dosen']);
 Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal')->middleware(['auth', 'verified', 'role:dosen']);
 Route::middleware(['auth', 'verified', 'role:dosen', 'dosen.wali'])->group(function () {

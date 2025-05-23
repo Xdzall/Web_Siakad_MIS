@@ -26,8 +26,4 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 
-    protected $routeMiddleware = [
-        // ...existing middlewares...
-        'dosen.wali' => DosenWali::class,
-    ];
 }
