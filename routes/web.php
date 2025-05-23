@@ -26,20 +26,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Dosen wali routes
-Route::middleware(['auth', 'verified', 'role:dosen', 'dosen.wali'])->group(function () {
-    Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs');
-    Route::post('/dosen/frs/validate', [DosenController::class, 'validateFrs'])->name('dosen.frs.validate');
-});
+Route::middleware(['auth', 'verified', 'role:dosen'])->group(function () {
+    Route::get('/dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
+    Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal');
+    Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai');
+    Route::post('/dosen/nilai', [DosenController::class, 'storeNilai'])->name('dosen.nilai.store');
 
-Route::get('/dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard')->middleware(['auth', 'verified', 'role:dosen']);
-Route::get('/dosen/jadwal', [DosenController::class, 'jadwal'])->name('dosen.jadwal')->middleware(['auth', 'verified', 'role:dosen']);
-Route::middleware(['auth', 'verified', 'role:dosen', 'dosen.wali'])->group(function () {
-    Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs')->middleware(['auth', 'verified', 'role:dosen']);
-    Route::post('/dosen/frs/{id}/acc', [DosenController::class, 'accFrs'])->name('dosen.frs.acc')->middleware(['auth', 'verified', 'role:dosen']);
+    // Dosen wali routes (nested)
+    Route::middleware(['dosen.wali'])->group(function () {
+        Route::get('/dosen/frs', [DosenController::class, 'frs'])->name('dosen.frs');
+        Route::post('/dosen/frs/validate', [DosenController::class, 'validateFrs'])->name('dosen.frs.validate');
+    });
 });
-Route::get('/dosen/nilai', [DosenController::class, 'nilai'])->name('dosen.nilai')->middleware(['auth', 'verified', 'role:dosen']);
-
 
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth', 'verified', 'role:admin']);
 Route::post('/admin/dosen', [AdminController::class, 'storeDosen'])->name('admin.dosen.store')->middleware(['auth', 'verified', 'role:admin']);
@@ -74,10 +72,15 @@ Route::get('/admin/mahasiswa/{id}/edit', [AdminController::class, 'editMahasiswa
 Route::put('/admin/mahasiswa/{id}', [AdminController::class, 'updateMahasiswa'])->name('admin.mahasiswa.update')->middleware(['auth', 'verified', 'role:admin']);
 Route::delete('/admin/mahasiswa/{id}', [AdminController::class, 'destroyMahasiswa'])->name('admin.mahasiswa.destroy')->middleware(['auth', 'verified', 'role:admin']);
 
-Route::get('/mahasiswa', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard')->middleware(['auth', 'verified', 'role:mahasiswa']);
-Route::get('/mahasiswa/jadwal', [MahasiswaController::class, 'jadwal'])->name('mahasiswa.jadwal')->middleware(['auth', 'verified', 'role:mahasiswa']);
-Route::get('/mahasiswa/frs', [MahasiswaController::class, 'frs'])->name('mahasiswa.frs')->middleware(['auth', 'verified', 'role:mahasiswa']);
-Route::get('/mahasiswa/nilai', [MahasiswaController::class, 'nilai'])->name('mahasiswa.nilai')->middleware(['auth', 'verified', 'role:mahasiswa']);
+
+Route::middleware(['auth', 'verified', 'role:mahasiswa'])->group(function () {
+    Route::get('/mahasiswa', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard');
+    Route::get('/mahasiswa/frs', [MahasiswaController::class, 'frs'])->name('mahasiswa.frs');
+    Route::post('/mahasiswa/frs', [MahasiswaController::class, 'storeFrs'])->name('mahasiswa.frs.store');
+    Route::delete('/mahasiswa/frs', [MahasiswaController::class, 'destroyFrs'])->name('mahasiswa.frs.destroy');
+    Route::get('/mahasiswa/nilai', [MahasiswaController::class, 'nilai'])->name('mahasiswa.nilai');
+    Route::get('/mahasiswa/jadwal', [MahasiswaController::class, 'jadwal'])->name('mahasiswa.jadwal');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

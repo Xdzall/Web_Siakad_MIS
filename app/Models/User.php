@@ -38,11 +38,12 @@ class User extends Authenticatable
     {
         return $this->is_wali;
     }
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'mahasiswa_id');
+    }
+    
     protected $hidden = [
         'password',
         'remember_token',

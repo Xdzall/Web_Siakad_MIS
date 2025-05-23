@@ -8,7 +8,7 @@ class Matakuliah extends Model
 {
     protected $fillable = [
         'kode',
-        'nama', 
+        'nama',
         'dosen_id',
         'kelas_id', // Ubah dari 'kelas' ke 'kelas_id'
         'sks',
@@ -30,5 +30,10 @@ class Matakuliah extends Model
     public function jadwalKuliah()
     {
         return $this->belongsTo(JadwalKuliah::class, 'jadwal_id');
+    }
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'mahasiswa_id');
     }
 }

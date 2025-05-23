@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\JadwalKuliah;
 use App\Models\Matakuliah;
 use App\Models\Kelas;
 use App\Models\FrsSubmission;
+use App\Models\Nilai;
+use App\Models\User;
 
 class DosenController extends Controller
 {
@@ -48,33 +49,111 @@ class DosenController extends Controller
 
     public function validateFrs(Request $request)
     {
+        // Validasi request
         $request->validate([
             'frs_id' => 'required|exists:frs_submissions,id',
             'status' => 'required|in:approved,rejected',
             'reason' => 'required_if:status,rejected'
         ]);
 
+        // Ambil submission FRS berdasarkan ID
         $frs = FrsSubmission::findOrFail($request->frs_id);
 
-        // Verify this dosen is the wali for this kelas
-        if ($frs->kelas->dosen_id !== auth()->id()) {
-            return back()->with('error', 'Unauthorized action');
+        // Pastikan yang memvalidasi adalah dosen wali dari kelas tersebut
+        $kelas = Kelas::find($frs->kelas_id);
+        if ($kelas->dosen_id != auth()->id()) {
+            return back()->with('error', 'Anda tidak berwenang memvalidasi FRS ini');
         }
 
-        $frs->update([
-            'status' => $request->status,
-            'rejection_reason' => $request->reason,
-            'validated_at' => now(),
-            'validated_by' => auth()->id()
-        ]);
+        // Update status FRS
+        $frs->status = $request->status;
 
-        return back()->with('success', 'FRS berhasil divalidasi');
+        // Jika ditolak, tambahkan alasan
+        if ($request->status === 'rejected') {
+            $frs->rejection_reason = $request->reason;
+        } else {
+            $frs->rejection_reason = null;
+        }
+
+        $frs->validated_at = now();
+        $frs->validated_by = auth()->id();
+        $frs->save();
+
+        return back()->with('success', 'FRS berhasil divalidasi dengan status: ' .
+            ($request->status === 'approved' ? 'Disetujui' : 'Ditolak'));
     }
 
-
-    public function nilai()
+    public function nilai(Request $request)
     {
-        return view('dosen.nilai');
+        // Ambil kelas yang diampu oleh dosen ini (mengajar mata kuliah di kelas tersebut)
+        $kelasYangDiampu = Matakuliah::where('dosen_id', auth()->id())
+            ->with('kelas')
+            ->get()
+            ->pluck('kelas')
+            ->unique('id');
+
+        // Inisialisasi variabel untuk mencegah error
+        $selectedKelas = null;
+        $mahasiswa = collect();
+        $selectedMatakuliah = null;
+        $matakuliah = collect(); // Tambahkan inisialisasi ini
+
+        if ($request->filled('kelas_id')) {
+            $selectedKelas = Kelas::find($request->kelas_id);
+
+            // Ambil matakuliah yang diajar oleh dosen di kelas tersebut
+            $matakuliah = Matakuliah::where('dosen_id', auth()->id())
+                ->where('kelas_id', $request->kelas_id)
+                ->get();
+
+            if ($request->filled('matakuliah_id')) {
+                $selectedMatakuliah = Matakuliah::find($request->matakuliah_id);
+
+                // Ambil mahasiswa yang sudah disetujui FRS untuk matakuliah ini
+                $approvedMahasiswaIds = FrsSubmission::where('kelas_id', $request->kelas_id)
+                    ->where('matakuliah_id', $request->matakuliah_id)
+                    ->where('status', 'approved')
+                    ->pluck('mahasiswa_id');
+
+                $mahasiswa = User::whereIn('id', $approvedMahasiswaIds)
+                    ->with(['nilai' => function ($query) use ($request) {
+                        $query->where('matakuliah_id', $request->matakuliah_id);
+                    }])
+                    ->get();
+            }
+        }
+
+        return view('dosen.nilai', compact('kelasYangDiampu', 'selectedKelas', 'mahasiswa', 'matakuliah', 'selectedMatakuliah'));
+    }
+
+    public function storeNilai(Request $request)
+    {
+        $request->validate([
+            'mahasiswa_id' => 'required|exists:users,id',
+            'matakuliah_id' => 'required|exists:matakuliahs,id',
+            'nilai_angka' => 'required|integer|min:0|max:100'
+        ]);
+
+        // Konversi nilai angka ke huruf
+        $nilai_huruf = Nilai::konversiNilai($request->nilai_angka);
+
+        // Update atau buat nilai baru
+        Nilai::updateOrCreate(
+            [
+                'mahasiswa_id' => $request->mahasiswa_id,
+                'matakuliah_id' => $request->matakuliah_id
+            ],
+            [
+                'dosen_id' => auth()->id(),
+                'nilai_angka' => $request->nilai_angka,
+                'nilai_huruf' => $nilai_huruf
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'nilai_huruf' => $nilai_huruf
+        ]);
     }
 
     public function jadwal()
