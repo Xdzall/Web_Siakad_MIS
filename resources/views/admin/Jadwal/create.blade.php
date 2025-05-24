@@ -50,7 +50,16 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Waktu</label>
-                <input type="text" name="waktu" class="w-full border rounded px-3 py-2" placeholder="08:00 - 09:40" required>
+                <select name="waktu" class="w-full border rounded px-3 py-2" required>
+                    <option value="">Pilih Waktu</option>
+                    <option value="08:00 - 09:40">08:00 - 09:40</option>
+                    <option value="09:45 - 11:25">09:45 - 11:25</option>
+                    <option value="11:30 - 13:10">11:30 - 13:10</option>
+                    <option value="13:15 - 14:55">13:15 - 14:55</option>
+                    <option value="15:00 - 16:40">15:00 - 16:40</option>
+                    <option value="16:45 - 18:25">16:45 - 18:25</option>
+                    <option value="18:30 - 20:10">18:30 - 20:10</option>
+                </select>
             </div>
 
             <div>

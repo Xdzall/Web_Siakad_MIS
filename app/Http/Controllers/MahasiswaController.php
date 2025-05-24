@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas;
 use App\Models\Matakuliah;
 use App\Models\FrsSubmission;
 use App\Models\Nilai;
@@ -58,7 +57,7 @@ class MahasiswaController extends Controller
 
         // Get matakuliah available for this kelas
         $matakuliahList = JadwalKuliah::with(['matakuliah', 'dosen', 'kelas'])
-            ->whereHas('matakuliah', function($query) use ($kelas){
+            ->whereHas('matakuliah', function ($query) use ($kelas) {
                 $query->where('semester', $kelas->semester);
             })
             ->get();
