@@ -1,167 +1,154 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Kelas - {{ $kelas->nama }}</h1>
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Edit Kelas: {{ $kelas->nama }}</h1>
+            <a href="{{ route('admin.kelas.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                Kembali
+            </a>
+        </div>
 
-        <form method="POST" action="{{ route('admin.kelas.update', $kelas->id) }}" class="space-y-6">
+        <form action="{{ route('admin.kelas.update', $kelas->id) }}" method="POST">
             @csrf
             @method('PUT')
-
-            {{-- Basic Info --}}
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Kelas</label>
-                    <input type="text" name="nama" value="{{ $kelas->nama }}" class="w-full border rounded px-3 py-2"
-                        required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Semester</label>
-                    <select name="semester" class="w-full border rounded px-3 py-2" required>
-                        @for ($i = 1; $i <= 8; $i++)
-                            <option value="{{ $i }}" {{ $kelas->semester == $i ? 'selected' : '' }}>
-                                Semester {{ $i }}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {{-- Informasi Dasar Kelas --}}
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">Informasi Kelas</h2>
+                    
+                    <div class="mb-4">
+                        <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama Kelas</label>
+                        <input type="text" name="nama" id="nama" value="{{ old('nama', $kelas->nama) }}" 
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="semester" class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                        <select name="semester" id="semester" 
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            @for ($i = 1; $i <= 8; $i++)
+                                <option value="{{ $i }}" {{ old('semester', $kelas->semester) == $i ? 'selected' : '' }}>
+                                    Semester {{ $i }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="tipe_semester" class="block text-sm font-medium text-gray-700 mb-1">Tipe Semester</label>
+                        <select name="tipe_semester" id="tipe_semester" 
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="ganjil" {{ old('tipe_semester', $kelas->tipe_semester) == 'ganjil' ? 'selected' : '' }}>
+                                Ganjil
                             </option>
-                        @endfor
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Tipe Semester</label>
-                <select name="tipe_semester" class="w-full border rounded px-3 py-2" required>
-                    <option value="ganjil" {{ $kelas->tipe_semester == 'ganjil' ? 'selected' : '' }}>Ganjil</option>
-                    <option value="genap" {{ $kelas->tipe_semester == 'genap' ? 'selected' : '' }}>Genap</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Dosen Wali</label>
-                <select name="dosen_id" class="w-full border rounded px-3 py-2">
-                    <option value="">Tanpa Dosen Wali (Kelas Tidak Aktif)</option>
-                    @foreach ($dosen as $d)
-                        <option value="{{ $d->id }}" {{ $kelas->dosen_id == $d->id ? 'selected' : '' }}>
-                            {{ $d->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <p class="text-sm text-gray-500 mt-1">
-                    * Menghapus dosen wali akan menonaktifkan kelas dan memindahkan semua mahasiswa
-                </p>
-            </div>
-
-            @if (!$kelas->active)
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
-                            </svg>
+                            <option value="genap" {{ old('tipe_semester', $kelas->tipe_semester) == 'genap' ? 'selected' : '' }}>
+                                Genap
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="dosen_id" class="block text-sm font-medium text-gray-700 mb-1">Dosen Wali</label>
+                        <select name="dosen_id" id="dosen_id" 
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- Pilih Dosen Wali --</option>
+                            @foreach ($dosen as $d)
+                                <option value="{{ $d->id }}" {{ old('dosen_id', $kelas->dosen_id) == $d->id ? 'selected' : '' }}>
+                                    {{ $d->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Kelas tanpa dosen wali akan berstatus tidak aktif.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Status Kelas:</p>
+                        <div class="flex items-center">
+                            <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full
+                                {{ $kelas->active ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100' }}">
+                                {{ $kelas->active ? 'Aktif' : 'Tidak Aktif' }}
+                            </span>
+                            <span class="ml-2 text-xs text-gray-500">
+                                (Status bergantung pada ketersediaan Dosen Wali)
+                            </span>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-yellow-700">
-                                Kelas ini tidak aktif karena tidak memiliki dosen wali.
-                                Mahasiswa tidak dapat ditambahkan sampai dosen wali ditugaskan.
+                    </div>
+                </div>
+                
+                {{-- Manajemen Mahasiswa --}}
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">Manajemen Mahasiswa</h2>
+                    
+                    @if($kelas->active)
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-700 mb-2">
+                                Pilih mahasiswa yang akan ditambahkan ke kelas ini:
                             </p>
+                            
+                            <div class="max-h-96 overflow-y-auto border rounded p-2">
+                                @forelse($availableMahasiswa as $mahasiswa)
+                                    <div class="flex items-center py-2 border-b last:border-b-0">
+                                        <input type="checkbox" name="current_mahasiswa[]" id="mahasiswa-{{ $mahasiswa->id }}" 
+                                            value="{{ $mahasiswa->id }}" 
+                                            {{ $mahasiswa->kelas_id == $kelas->id ? 'checked' : '' }}
+                                            class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500">
+                                        <label for="mahasiswa-{{ $mahasiswa->id }}" class="text-sm text-gray-700">
+                                            {{ $mahasiswa->name }} 
+                                            <span class="text-gray-500">({{ $mahasiswa->nrp }})</span>
+                                            @if($mahasiswa->kelas_id == $kelas->id)
+                                                <span class="ml-2 text-xs text-green-600">Saat ini di kelas ini</span>
+                                            @elseif($mahasiswa->kelas_id)
+                                                <span class="ml-2 text-xs text-red-600">Terdaftar di kelas lain</span>
+                                            @endif
+                                        </label>
+                                    </div>
+                                @empty
+                                    <p class="py-3 text-center text-gray-500">Tidak ada mahasiswa tersedia.</p>
+                                @endforelse
+                            </div>
+                            <input type="hidden" name="students_processed" value="1">
                         </div>
-                    </div>
+                    @else
+                        <div class="p-4 bg-yellow-50 text-yellow-700 rounded">
+                            <p>Kelas tidak aktif. Anda harus menentukan Dosen Wali terlebih dahulu untuk dapat menambahkan mahasiswa.</p>
+                        </div>
+                    @endif
                 </div>
-
-                {{-- Disable mahasiswa management if kelas not active --}}
-                <div class="opacity-50 pointer-events-none">
-            @endif
-
-            {{-- Mahasiswa Management --}}
-            <div class="border rounded p-4">
-                <h2 class="text-lg font-semibold mb-4">Manajemen Mahasiswa</h2>
-                <div class="grid grid-cols-2 gap-6">
-                    {{-- Current Mahasiswa --}}
-                    <div>
-                        <h3 class="font-medium mb-2">Mahasiswa di Kelas ({{ $kelas->mahasiswa->count() }})</h3>
-                        <select name="current_mahasiswa[]" id="current_mahasiswa" multiple
-                            class="w-full border rounded px-3 py-2 h-64">
-                            @foreach ($kelas->mahasiswa as $mhs)
-                                <option value="{{ $mhs->id }}">{{ $mhs->name }} ({{ $mhs->nrp }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Available Mahasiswa --}}
-                    <div>
-                        <h3 class="font-medium mb-2">Mahasiswa Tersedia</h3>
-                        <select name="available_mahasiswa[]" id="available_mahasiswa" multiple
-                            class="w-full border rounded px-3 py-2 h-64">
-                            @foreach ($availableMahasiswa->whereNotIn('id', $kelas->mahasiswa->pluck('id')) as $mhs)
-                                <option value="{{ $mhs->id }}">{{ $mhs->name }} ({{ $mhs->nrp }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                {{-- Control Buttons --}}
-                <div class="flex justify-center gap-4 mt-4">
-                    <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                        onclick="moveSelectedOptions('available_mahasiswa', 'current_mahasiswa')">
-                        ← Tambah ke Kelas
+            </div>
+            
+            <div class="flex justify-between mt-8">
+                <a href="{{ route('admin.kelas.index') }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                    Batal
+                </a>
+                <div class="flex gap-3">
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Simpan Perubahan
                     </button>
-                    <button type="button" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        onclick="moveSelectedOptions('current_mahasiswa', 'available_mahasiswa')">
-                        Keluarkan dari Kelas →
+                    
+                    {{-- Delete Button with Confirmation --}}
+                    <button type="button" onclick="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        Hapus Kelas
                     </button>
                 </div>
             </div>
-
-            @if (!$kelas->active)
+        </form>
+        
+        {{-- Delete Form (Hidden) --}}
+        <form id="delete-form" action="{{ route('admin.kelas.destroy', $kelas->id) }}" method="POST" class="hidden">
+            @csrf
+            @method('DELETE')
+        </form>
     </div>
-    @endif
-
-    <div class="flex justify-between">
-        <a href="{{ route('admin.kelas.index') }}" class="text-gray-600 hover:underline">← Kembali</a>
-        <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-            Simpan Perubahan
-        </button>
-    </div>
-    </form>
-    </div>
-
-    @push('scripts')
-        <script>
-            function moveSelectedOptions(fromId, toId) {
-                const fromSelect = document.getElementById(fromId);
-                const toSelect = document.getElementById(toId);
-
-                // Get all selected options
-                const selectedOptions = Array.from(fromSelect.selectedOptions);
-
-                if (selectedOptions.length === 0) {
-                    alert('Pilih mahasiswa terlebih dahulu');
-                    return;
-                }
-
-                // Move each selected option
-                selectedOptions.forEach(option => {
-                    // Create new option in target select
-                    const newOption = new Option(option.text, option.value);
-                    toSelect.add(newOption);
-                    // Remove from source select
-                    fromSelect.remove(option.index);
-                });
+    
+    <script>
+        function confirmDelete() {
+            if (confirm('Apakah Anda yakin ingin menghapus kelas ini? Semua mahasiswa akan dikeluarkan dari kelas ini.')) {
+                document.getElementById('delete-form').submit();
             }
-
-            // Select all options in current_mahasiswa before form submission
-            document.querySelector('form').addEventListener('submit', function(e) {
-                const currentMahasiswa = document.getElementById('current_mahasiswa');
-                if (currentMahasiswa.options.length === 0) {
-                    e.preventDefault();
-                    alert('Kelas harus memiliki minimal 1 mahasiswa');
-                    return;
-                }
-                Array.from(currentMahasiswa.options).forEach(option => {
-                    option.selected = true;
-                });
-            });
-        </script>
-    @endpush
+        }
+    </script>
 @endsection
