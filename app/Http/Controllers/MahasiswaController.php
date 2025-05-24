@@ -6,6 +6,7 @@ use App\Models\Kelas;
 use App\Models\Matakuliah;
 use App\Models\FrsSubmission;
 use App\Models\Nilai;
+use App\Models\JadwalKuliah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,9 +57,10 @@ class MahasiswaController extends Controller
         }
 
         // Get matakuliah available for this kelas
-        $matakuliahList = Matakuliah::where('kelas_id', $kelas->id)
-            ->where('semester', $user->semester)
-            ->with(['dosen', 'jadwalKuliah'])
+        $matakuliahList = JadwalKuliah::with(['matakuliah', 'dosen', 'kelas'])
+            ->whereHas('matakuliah', function($query) use ($kelas){
+                $query->where('semester', $kelas->semester);
+            })
             ->get();
 
         // Get user's FRS submissions

@@ -4,6 +4,23 @@
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Tambah Matakuliah</h1>
 
+        @if(session('error'))
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                <p class="font-medium">Error!</p>
+                <p>{{ session('error') }}</p>
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+                <p class="font-medium">Ada kesalahan pada input:</p>
+                <ul class="list-disc ml-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('admin.matakuliah.store') }}" class="space-y-4">
             @csrf
             <div>
@@ -17,16 +34,6 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                <select name="kelas_id" class="w-full border rounded px-3 py-2" required>
-                    <option value="">Pilih Kelas</option>
-                    @foreach ($kelas as $k)
-                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
                 <label class="block text-sm font-medium text-gray-700">Semester</label>
                 <select name="semester" class="w-full border rounded px-3 py-2" required>
                     <option value="">Pilih Semester</option>
@@ -37,33 +44,8 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Dosen Pengajar</label>
-                <select name="dosen_id" class="w-full border rounded px-3 py-2" required>
-                    <option value="">Pilih Dosen</option>
-                    @foreach ($dosen as $d)
-                        <option value="{{ $d->id }}">{{ $d->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
                 <label class="block text-sm font-medium text-gray-700">SKS</label>
                 <input type="number" name="sks" class="w-full border rounded px-3 py-2" min="1" required>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Jadwal</label>
-                <select name="jadwal_id" class="w-full border rounded px-3 py-2" required>
-                    <option value="">Pilih Jadwal</option>
-                    @foreach ($jadwal as $j)
-                        <option value="{{ $j->id }}">{{ $j->hari }} - {{ $j->waktu }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Ruang</label>
-                <input type="text" name="ruang" class="w-full border rounded px-3 py-2" required>
             </div>
 
             <div class="flex justify-between items-center">

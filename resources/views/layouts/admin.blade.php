@@ -15,32 +15,36 @@
 
         <nav class="space-y-4 flex-grow">
             <a href="{{ route('admin.dashboard') }}" 
-               class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.dashboard') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.dashboard') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Overview
             </a>
 
             <a href="{{ route('admin.mahasiswa.index') }}" 
-               class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.mahasiswa') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.mahasiswa') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
                 <i data-lucide="graduation-cap" class="w-5 h-5"></i> Mahasiswa
             </a>
 
             <a href="{{ route('admin.dosen.index') }}" 
-               class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.dosen') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.dosen') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
                 <i data-lucide="user" class="w-5 h-5"></i> Dosen
             </a>
 
             <a href="{{ route('admin.matakuliah.index') }}" 
-               class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.matakuliah') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.matakuliah') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
                 <i data-lucide="book-open" class="w-5 h-5"></i> Matakuliah
             </a>
 
             <a href="{{ route('admin.kelas.index') }}" 
-               class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.frs') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+            class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.frs') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
                 <i data-lucide="file-text" class="w-5 h-5"></i> Kelas
             </a>
 
+            <a href="{{ route('admin.jadwal.index') }}" class="flex items-center gap-2 py-2 px-4 rounded {{ request()->routeIs('admin.jadwalKuliah') ? 'bg-[#4e81c8] text-white' : 'hover:bg-[#4e81c8]' }}">
+                <i data-lucide="calendar" class="w-5 h-5"></i> Jadwal Kuliah
+            </a>
+
             <a href="{{ route('profile.edit') }}" 
-               class="flex items-center gap-2 py-2 px-4 rounded hover:bg-[#4e81c8]">
+            class="flex items-center gap-2 py-2 px-4 rounded hover:bg-[#4e81c8]">
                 <i data-lucide="user-cog" class="w-5 h-5"></i> Profil
             </a>
         </nav>

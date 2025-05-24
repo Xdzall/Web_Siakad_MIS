@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@admin.pens.ac.id',
             'password' => bcrypt('admin123'),
-       ] );
+    ] );
 
         $admin->assignRole('admin');
 
@@ -41,6 +41,5 @@ class UserSeeder extends Seeder
     //     $dosen->assignRole('dosen');
 
 
-       
     }
 }

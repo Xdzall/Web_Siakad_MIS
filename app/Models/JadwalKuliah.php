@@ -12,21 +12,24 @@ class JadwalKuliah extends Model
     protected $fillable = [
         'hari',
         'waktu',
+        'matakuliah_id',
+        'dosen_id',
+        'kelas_id',
+        'ruang'
     ];
-    public function kelas()
-    {
-        return $this->hasMany(Kelas::class);
-    }
+    
     public function matakuliah()
     {
-        return $this->hasMany(Matakuliah::class);
+        return $this->belongsTo(Matakuliah::class);
     }
+    
     public function dosen()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class, 'dosen_id');
     }
-    public function mahasiswa()
+    
+    public function kelas()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(Kelas::class);
     }
 }

@@ -82,6 +82,15 @@ Route::middleware(['auth', 'verified', 'role:mahasiswa'])->group(function () {
     Route::get('/mahasiswa/jadwal', [MahasiswaController::class, 'jadwal'])->name('mahasiswa.jadwal');
 });
 
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/admin/jadwal', [JadwalKuliahController::class, 'index'])->name('admin.jadwal.index');
+    Route::get('/admin/jadwal/create', [JadwalKuliahController::class, 'create'])->name('admin.jadwal.create');
+    Route::post('/admin/jadwal', [JadwalKuliahController::class, 'store'])->name('admin.jadwal.store');
+    Route::get('/admin/jadwal/{id}/edit', [JadwalKuliahController::class, 'edit'])->name('admin.jadwal.edit');
+    Route::put('/admin/jadwal/{id}', [JadwalKuliahController::class, 'update'])->name('admin.jadwal.update');
+    Route::delete('/admin/jadwal/{id}', [JadwalKuliahController::class, 'destroy'])->name('admin.jadwal.destroy');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

@@ -1,39 +1,50 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\JadwalKuliah;
+use App\Models\Kelas;
+use App\Models\Nilai;
 
 class Matakuliah extends Model
 {
     protected $fillable = [
         'kode',
         'nama',
-        'dosen_id',
-        'kelas_id', // Ubah dari 'kelas' ke 'kelas_id'
-        'sks',
-        'jadwal_id', // Ubah dari 'jadwal' ke 'jadwal_id'
-        'ruang',
-        'semester'
+        'semester',
+        'sks'
     ];
-
-    public function dosen()
-    {
-        return $this->belongsTo(User::class, 'dosen_id');
-    }
-
-    public function kelas()
-    {
-        return $this->belongsTo(Kelas::class, 'kelas_id');
-    }
 
     public function jadwalKuliah()
     {
-        return $this->belongsTo(JadwalKuliah::class, 'jadwal_id');
+        return $this->hasOne(JadwalKuliah::class);
+    }
+
+    public function dosen(){
+        return $this->hasOneThrough(
+            User::class,
+            JadwalKuliah::class,
+            'matakuliah_id',
+            'id',
+            'id',
+            'dosen_id'
+        );
+    }
+
+    public function kelas(){
+        return $this->hasOneThrough(
+            Kelas::class,
+            JadwalKuliah::class,
+            'matakuliah_id',
+            'id',
+            'id',
+            'kelas_id'
+        );
     }
 
     public function nilai()
     {
-        return $this->hasMany(Nilai::class, 'mahasiswa_id');
+        return $this->hasMany(Nilai::class, 'matakuliah_id');
     }
 }

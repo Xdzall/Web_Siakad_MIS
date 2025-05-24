@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\FrsSubmission;
 use App\Models\Nilai;
 use App\Models\User;
+use App\Models\JadwalKuliah;
 
 class DosenController extends Controller
 {
@@ -158,6 +159,10 @@ class DosenController extends Controller
 
     public function jadwal()
     {
+        $user = auth()->user();
+        $jadwal = JadwalKuliah::where('dosen_id', $user->id)
+            ->with(['matakuliah', 'kelas'])
+            ->get();
         // Get logged in dosen's matakuliah
         $matakuliah = Matakuliah::with('jadwalKuliah')
             ->where('dosen_id', auth()->id())
