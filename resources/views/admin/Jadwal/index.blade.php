@@ -4,8 +4,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Daftar Jadwal Kuliah</h1>
-            <a href="{{ route('admin.jadwal.create') }}"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <a href="{{ route('admin.jadwal.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-600">
                 + Tambah Jadwal
             </a>
         </div>
@@ -55,7 +54,8 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse($jadwal as $j)
                         <tr class="hover:bg-gray-50 transition-all duration-200">
-                            <td class="py-4 px-6 whitespace-nowrap">{{ $j->matakuliah->kode }} - {{ $j->matakuliah->nama ?? 'Belum ada matakuliah' }}</td>
+                            <td class="py-4 px-6 whitespace-nowrap">{{ $j->matakuliah->kode }} -
+                                {{ $j->matakuliah->nama ?? 'Belum ada matakuliah' }}</td>
                             <td class="py-4 px-6 whitespace-nowrap">{{ $j->dosen->name ?? 'Belum ada dosen' }}</td>
                             <td class="py-4 px-6 text-center">{{ $j->kelas->nama ?? 'Belum ada kelas' }}</td>
                             <td class="py-4 px-6 text-center">{{ $j->hari }}</td>
@@ -66,8 +66,8 @@
                                     class="text-blue-600 hover:underline font-medium">
                                     Edit
                                 </a>
-                                <form action="{{ route('admin.jadwal.destroy', $j->id) }}" method="POST"
-                                    class="inline" onsubmit="return confirm('Yakin hapus jadwal ini?')">
+                                <form action="{{ route('admin.jadwal.destroy', $j->id) }}" method="POST" class="inline"
+                                    onsubmit="return confirm('Yakin hapus jadwal ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

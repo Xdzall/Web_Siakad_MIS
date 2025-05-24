@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 use Illuminate\Support\Facades\Log;
+use App\Models\Matakuliah;
+use App\Models\FrsSubmission;
+use Spatie\Permission\Models\Role;
 
 
 class AdminController extends Controller
@@ -214,7 +217,23 @@ class AdminController extends Controller
     // Dashboard
     public function dashboard()
     {
-        return view('admin.dashboard');
-    }
+        $totalMahasiswa = user::role('mahasiswa')->count();
+        $totalDosen = user::role('dosen')->count();
 
+        $userData = [
+            'labels' => ['Mahasiswa', 'Dosen'],
+            'counts' => [$totalMahasiswa, $totalDosen]
+        ];
+
+        $totalMatakuliah = Matakuliah::count();
+        $totalFrs = FrsSubmission::count();
+
+        return view('admin.dashboard', compact(
+            'totalMahasiswa',
+            'totalDosen',
+            'totalMatakuliah',
+            'totalFrs',
+            'userData'
+        ));
+    }
 }

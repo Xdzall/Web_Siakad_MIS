@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(DosenSeeder::class);
+        $this->call(MahasiswaSeeder::class);
         
         if (Kelas::count() == 0) {
             $dosen = User::role('dosen')->first();
@@ -71,5 +73,6 @@ class DatabaseSeeder extends Seeder
         
         // 5. Jalankan JadwalKuliahSeeder yang sudah diperbarui
         $this->call(JadwalKuliahSeeder::class);
+
     }
 }
