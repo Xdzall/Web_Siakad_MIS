@@ -21,8 +21,7 @@ class DosenController extends Controller
         return view('dosen.dashboard');
     }
 
-    public function frs()
-    {
+    public function frs(){
         // Check if user is dosen wali
         if (!auth()->user()->is_wali) {
             return redirect()->route('dosen.dashboard')
@@ -32,7 +31,7 @@ class DosenController extends Controller
         // Get kelas where current dosen is wali with relationships
         $kelas = Kelas::where('dosen_id', auth()->id())
             ->where('active', true)
-            ->with(['mahasiswa', 'matakuliah.jadwalKuliah'])
+            ->with(['mahasiswa', 'matakuliah'])
             ->first();
 
         if (!$kelas) {
@@ -45,6 +44,12 @@ class DosenController extends Controller
             ->with(['mahasiswa', 'matakuliah'])
             ->get()
             ->groupBy('matakuliah_id');
+
+        foreach ($kelas->matakuliah as $mk) {
+            if (!isset($frsSubmissions[$mk->id])) {
+                $frsSubmissions[$mk->id] = collect();
+            }
+        }
 
         return view('dosen.frs', compact('kelas', 'frsSubmissions'));
     }
@@ -85,48 +90,46 @@ class DosenController extends Controller
             ($request->status === 'approved' ? 'Disetujui' : 'Ditolak'));
     }
 
-    public function nilai(Request $request)
-    {
-        // Ambil kelas yang diampu oleh dosen ini (mengajar mata kuliah di kelas tersebut)
-        $kelasYangDiampu = Matakuliah::where('dosen_id', auth()->id())
-            ->with('kelas')
-            ->get()
-            ->pluck('kelas')
-            ->unique('id');
+    public function nilai(Request $request){
+            $kelasYangDiampu = JadwalKuliah::where('dosen_id', auth()->id())
+                ->with('kelas')
+                ->get()
+                ->pluck('kelas')
+                ->unique('id');
 
-        // Inisialisasi variabel untuk mencegah error
-        $selectedKelas = null;
-        $mahasiswa = collect();
-        $selectedMatakuliah = null;
-        $matakuliah = collect(); // Tambahkan inisialisasi ini
+            $selectedKelas = null;
+            $mahasiswa = collect();
+            $selectedMatakuliah = null;
+            $matakuliah = collect();
 
-        if ($request->filled('kelas_id')) {
-            $selectedKelas = Kelas::find($request->kelas_id);
+            if ($request->filled('kelas_id')) {
+                $selectedKelas = Kelas::find($request->kelas_id);
 
-            // Ambil matakuliah yang diajar oleh dosen di kelas tersebut
-            $matakuliah = Matakuliah::where('dosen_id', auth()->id())
-                ->where('kelas_id', $request->kelas_id)
-                ->get();
+                $matakuliah = JadwalKuliah::where('dosen_id', auth()->id())
+                    ->where('kelas_id', $request->kelas_id)
+                    ->with('matakuliah')
+                    ->get()
+                    ->pluck('matakuliah')
+                    ->unique('id');
 
-            if ($request->filled('matakuliah_id')) {
-                $selectedMatakuliah = Matakuliah::find($request->matakuliah_id);
+                if ($request->filled('matakuliah_id')) {
+                    $selectedMatakuliah = Matakuliah::find($request->matakuliah_id);
 
-                // Ambil mahasiswa yang sudah disetujui FRS untuk matakuliah ini
-                $approvedMahasiswaIds = FrsSubmission::where('kelas_id', $request->kelas_id)
-                    ->where('matakuliah_id', $request->matakuliah_id)
-                    ->where('status', 'approved')
-                    ->pluck('mahasiswa_id');
+                    $approvedMahasiswaIds = FrsSubmission::where('kelas_id', $request->kelas_id)
+                        ->where('matakuliah_id', $request->matakuliah_id)
+                        ->where('status', 'approved')
+                        ->pluck('mahasiswa_id');
 
-                $mahasiswa = User::whereIn('id', $approvedMahasiswaIds)
-                    ->with(['nilai' => function ($query) use ($request) {
-                        $query->where('matakuliah_id', $request->matakuliah_id);
-                    }])
-                    ->get();
+                    $mahasiswa = User::whereIn('id', $approvedMahasiswaIds)
+                        ->with(['nilai' => function ($query) use ($request) {
+                            $query->where('matakuliah_id', $request->matakuliah_id);
+                        }])
+                        ->get();
+                }
             }
-        }
 
-        return view('dosen.nilai', compact('kelasYangDiampu', 'selectedKelas', 'mahasiswa', 'matakuliah', 'selectedMatakuliah'));
-    }
+            return view('dosen.nilai', compact('kelasYangDiampu', 'selectedKelas', 'mahasiswa', 'matakuliah', 'selectedMatakuliah'));
+        }
 
     public function storeNilai(Request $request)
     {
@@ -158,26 +161,21 @@ class DosenController extends Controller
         ]);
     }
 
-    public function jadwal()
-    {
+    public function jadwal(){
         $user = auth()->user();
         $jadwal = JadwalKuliah::where('dosen_id', $user->id)
             ->with(['matakuliah', 'kelas'])
             ->get();
-        // Get logged in dosen's matakuliah
-        $matakuliah = Matakuliah::with('jadwalKuliah')
-            ->where('dosen_id', auth()->id())
-            ->get();
 
         // Group jadwal by hari
         $grouped = collect();
-        foreach ($matakuliah as $mk) {
+        foreach ($jadwal as $jdwl) {
             $grouped->push([
-                'hari' => $mk->jadwalKuliah->hari,
-                'mata_kuliah' => $mk->nama,
-                'waktu' => $mk->jadwalKuliah->waktu,
-                'ruang' => $mk->ruang,
-                'kelas' => $mk->kelas->nama
+                'hari' => $jdwl->hari,
+                'mata_kuliah' => $jdwl->matakuliah->nama,
+                'waktu' => $jdwl->waktu,
+                'ruang' => $jdwl->ruang,
+                'kelas' => $jdwl->kelas->nama
             ]);
         }
 
@@ -185,6 +183,7 @@ class DosenController extends Controller
 
         return view('dosen.jadwal', compact('grouped'));
     }
+
     /**
      * Show the form for creating a new resource.
      */

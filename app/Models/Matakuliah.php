@@ -18,7 +18,7 @@ class Matakuliah extends Model
 
     public function jadwalKuliah()
     {
-        return $this->hasOne(JadwalKuliah::class);
+        return $this->hasMany(JadwalKuliah::class);
     }
 
     public function dosen(){

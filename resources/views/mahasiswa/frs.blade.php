@@ -29,10 +29,12 @@
                 <div class="flex gap-4">
                     <select name="matakuliah_id" class="flex-1 border rounded px-3 py-2" required>
                         <option value="">-- Pilih Matakuliah --</option>
-                        @foreach ($matakuliahList as $mk)
-                            @if (!isset($frsSubmissions[$mk->id]))
-                                <option value="{{ $mk->id }}">{{ $mk->nama }} ({{ $mk->sks }} SKS) -
-                                    {{ $mk->dosen->name }}</option>
+                        @foreach ($matakuliahList as $jadwal)
+                            @if (!isset($frsSubmissions[$jadwal->matakuliah->id]))
+                                <option value="{{ $jadwal->matakuliah->id }}">
+                                    {{ $jadwal->matakuliah->nama }} ({{ $jadwal->matakuliah->sks }} SKS) - 
+                                    {{ $jadwal->dosen->name }}
+                                </option>
                             @endif
                         @endforeach
                     </select>
@@ -69,10 +71,20 @@
                                     <td class="px-4 py-2">{{ $frs->matakuliah->nama }}</td>
                                     <td class="px-4 py-2">{{ $frs->matakuliah->sks }}</td>
                                     <td class="px-4 py-2">
-                                        {{ $frs->matakuliah->jadwalKuliah->hari }},
-                                        {{ $frs->matakuliah->jadwalKuliah->waktu }}
+                                    @if($frs->matakuliah->jadwalKuliah->count() > 0)
+                                        {{ $frs->matakuliah->jadwalKuliah->first()->hari }},
+                                        {{ $frs->matakuliah->jadwalKuliah->first()->waktu }}
+                                    @else
+                                        Tidak terjadwal
+                                    @endif
                                     </td>
-                                    <td class="px-4 py-2">{{ $frs->matakuliah->dosen->name }}</td>
+                                    <td class="px-4 py-2">
+                                    @if($frs->matakuliah->jadwalKuliah->count() > 0)
+                                        {{ $frs->matakuliah->jadwalKuliah->first()->dosen->name ?? 'Belum ditentukan' }}
+                                    @else
+                                        Belum ditentukan
+                                    @endif
+                                    </td>
                                     <td class="px-4 py-2">
                                         @if ($frs->status === 'pending')
                                             <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">

@@ -24,10 +24,18 @@ class Kelas extends Model
     {
         return $this->belongsTo(User::class, 'dosen_id');
     }
-    public function matakuliah()
-    {
-        return $this->hasMany(Matakuliah::class);
+
+    public function matakuliah(){
+        return $this->hasManyThrough(
+            Matakuliah::class,
+            JadwalKuliah::class,
+            'kelas_id',
+            'id',
+            'id', 
+            'matakuliah_id'
+        );
     }
+
     public function mahasiswa()
     {
         return $this->hasMany(User::class, 'kelas_id');

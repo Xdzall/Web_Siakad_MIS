@@ -16,12 +16,11 @@ class MahasiswaController extends Controller
         return view('mahasiswa.dashboard');
     }
 
-    public function jadwal()
-    {
+    public function jadwal(){
         $user = Auth::user();
         $approvedMatakuliah = FrsSubmission::where('mahasiswa_id', $user->id)
             ->where('status', 'approved')
-            ->with(['matakuliah.jadwalKuliah'])
+            ->with(['matakuliah.jadwalKuliah.dosen'])  // Include dosen relation
             ->get()
             ->pluck('matakuliah');
 
@@ -30,13 +29,17 @@ class MahasiswaController extends Controller
         $grouped = collect();
 
         foreach ($approvedMatakuliah as $mk) {
-            if ($mk && $mk->jadwalKuliah) {
+            // Check if matakuliah has jadwal entries
+            if ($mk && $mk->jadwalKuliah && $mk->jadwalKuliah->count() > 0) {
+                // Use first jadwal entry for this matakuliah
+                $jadwal = $mk->jadwalKuliah->first();
+                
                 $grouped->push([
-                    'hari' => $mk->jadwalKuliah->hari,
+                    'hari' => $jadwal->hari,
                     'mata_kuliah' => $mk->nama,
-                    'waktu' => $mk->jadwalKuliah->waktu,
-                    'ruang' => $mk->ruang,
-                    'dosen' => $mk->dosen->name
+                    'waktu' => $jadwal->waktu,
+                    'ruang' => $jadwal->ruang,
+                    'dosen' => $jadwal->dosen->name ?? 'Belum ditentukan'
                 ]);
             }
         }
@@ -56,10 +59,8 @@ class MahasiswaController extends Controller
         }
 
         // Get matakuliah available for this kelas
-        $matakuliahList = JadwalKuliah::with(['matakuliah', 'dosen', 'kelas'])
-            ->whereHas('matakuliah', function ($query) use ($kelas) {
-                $query->where('semester', $kelas->semester);
-            })
+        $matakuliahList = JadwalKuliah::where('kelas_id', $kelas->id)
+            ->with(['matakuliah', 'dosen'])
             ->get();
 
         // Get user's FRS submissions
@@ -80,8 +81,12 @@ class MahasiswaController extends Controller
 
         // Check if matakuliah belongs to user's kelas
         $matakuliah = Matakuliah::findOrFail($request->matakuliah_id);
-        if ($matakuliah->kelas_id != $user->kelas_id) {
-            return back()->with('error', 'Matakuliah tidak tersedia untuk kelas Anda.');
+        $matakuliahInUserKelas = JadwalKuliah::where('matakuliah_id', $matakuliah->id)
+            ->where('kelas_id', $user->kelas_id)
+            ->exists();
+        
+        if (!$matakuliahInUserKelas) {
+            return back()->with('error', 'Matakuliah tidak tersedia di kelas Anda.');
         }
 
         // Create FRS submission
