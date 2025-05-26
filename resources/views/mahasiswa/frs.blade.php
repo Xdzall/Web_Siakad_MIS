@@ -27,9 +27,6 @@
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold">Pilih Matakuliah</h2>
-                <div class="bg-yellow-50 text-yellow-800 text-sm px-3 py-1 rounded">
-                    Anda sedang memilih matakuliah untuk semester {{ $user->semester }}
-                </div>
             </div>
 
             <form action="{{ route('mahasiswa.frs.store') }}" method="POST" class="mb-6">
