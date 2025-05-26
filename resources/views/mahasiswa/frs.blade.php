@@ -4,8 +4,11 @@
     <div class="space-y-6">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold">Formulir Rencana Studi (FRS)</h1>
-            <div class="text-sm text-gray-600">
-                Semester: {{ $user->semester }}
+            <div class="text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
+                    Semester: {{ $user->semester }} 
+                    ({{ $user->semester % 2 == 1 ? 'Ganjil' : 'Genap' }})
+                </span>
             </div>
         </div>
 
@@ -22,7 +25,9 @@
         @endif
 
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">Pilih Matakuliah</h2>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Pilih Matakuliah</h2>
+            </div>
 
             <form action="{{ route('mahasiswa.frs.store') }}" method="POST" class="mb-6">
                 @csrf
@@ -33,7 +38,8 @@
                             @if (!isset($frsSubmissions[$jadwal->matakuliah->id]))
                                 <option value="{{ $jadwal->matakuliah->id }}">
                                     {{ $jadwal->matakuliah->nama }} ({{ $jadwal->matakuliah->sks }} SKS) - 
-                                    {{ $jadwal->dosen->name }}
+                                    {{ $jadwal->dosen->name }} - 
+                                    Semester {{ $jadwal->matakuliah->semester }}
                                 </option>
                             @endif
                         @endforeach
@@ -55,7 +61,8 @@
                             <tr>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Kode</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Matakuliah</th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">SKS</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500">SKS</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500">Semester</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Jadwal</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Dosen</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Status</th>
@@ -69,7 +76,12 @@
                                 <tr>
                                     <td class="px-4 py-2">{{ $frs->matakuliah->kode }}</td>
                                     <td class="px-4 py-2">{{ $frs->matakuliah->nama }}</td>
-                                    <td class="px-4 py-2">{{ $frs->matakuliah->sks }}</td>
+                                    <td class="px-4 py-2 text-center">{{ $frs->matakuliah->sks }}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <span class="px-2 py-1 text-xs {{ $frs->matakuliah->semester == $user->semester ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800' }} rounded-full">
+                                            {{ $frs->matakuliah->semester }}
+                                        </span>
+                                    </td>
                                     <td class="px-4 py-2">
                                     @if($frs->matakuliah->jadwalKuliah->count() > 0)
                                         {{ $frs->matakuliah->jadwalKuliah->first()->hari }},
@@ -125,8 +137,8 @@
                         <tfoot>
                             <tr class="bg-gray-50">
                                 <td colspan="2" class="px-4 py-2 font-medium">Total SKS</td>
-                                <td class="px-4 py-2 font-medium">{{ $totalSks }}</td>
-                                <td colspan="4"></td>
+                                <td class="px-4 py-2 font-medium text-center">{{ $totalSks }}</td>
+                                <td colspan="5"></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -145,7 +157,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-sm text-yellow-700">
-                        FRS yang telah disetujui tidak dapat dihapus. Hubungi Admin jika ada perubahan.
+                        FRS yang telah disetujui tidak dapat dihapus. Hubungi Dosen Wali jika ada perubahan.
                     </p>
                 </div>
             </div>
