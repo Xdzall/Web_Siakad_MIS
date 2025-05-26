@@ -28,19 +28,17 @@ class AdminController extends Controller
         $query = User::role('mahasiswa');
 
         // Apply kelas filter
-        if ($request->filled('kelas')) {
+        if ($request->filled('kelas') && $request->kelas) {
             $query->where('kelas_id', $request->kelas);
         }
 
         // Apply semester filter
-        if ($request->filled('semester')) {
+        if ($request->filled('semester') && $request->semester) {
             $query->where('semester', $request->semester);
         }
 
         // Get filtered results
         $mahasiswa = $query->get();
-
-        // Get kelas for filter dropdown
         $kelas = Kelas::where('active', true)->get();
 
         return view('admin.mahasiswa.index', compact('mahasiswa', 'kelas'));

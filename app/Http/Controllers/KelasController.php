@@ -43,6 +43,21 @@ class KelasController extends Controller
         return view('admin.kelas.create', compact('dosen'));
     }
 
+    public function getMahasiswaBySemester(Request $request){
+        $semester = $request->semester;
+        $kelasId = $request->kelas_id;
+
+        $mahasiswa = User::role('mahasiswa')
+            ->where('semester', $semester)
+            ->where(function ($query) use ($kelasId) {
+                $query->whereNull('kelas_id')
+                    ->orWhere('kelas_id', $kelasId);
+            })
+            ->get();
+        
+        return response()->json($mahasiswa);
+    }
+
     // Simpan kelas baru
     public function store(Request $request)
     {
@@ -110,6 +125,9 @@ class KelasController extends Controller
             'data' => $request->has('current_mahasiswa') ? $request->current_mahasiswa : 'none'
         ]);
         $kelas = Kelas::findOrFail($id);
+
+        $semesterChanged = $kelas->semester != $request->semester;
+        $oldSemester = $kelas->semester;
         
         // Basic validation
         $request->validate([
@@ -126,6 +144,12 @@ class KelasController extends Controller
             'dosen_id' => $request->dosen_id,
             'active' => (bool)$request->dosen_id
         ]);
+
+        if ($semesterChanged){
+            User::where('kelas_id', $kelas->id)->update([
+                'semester' => $request->semester
+            ]);
+        }
         
         // If class is inactive, remove all students
         if (!$kelas->active) {
