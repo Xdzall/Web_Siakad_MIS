@@ -4,7 +4,10 @@
     <div class="space-y-6">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold">Validasi FRS - {{ $kelas->nama }}</h1>
-            <span class="text-sm text-gray-600">Total Mahasiswa: {{ $kelas->mahasiswa->count() }}</span>
+            <div>
+                <span class="text-sm text-gray-600 mr-3">Semester: <strong>{{ $kelas->semester }}</strong> ({{ $kelas->tipe_semester == 'ganjil' ? 'Ganjil' : 'Genap' }})</span>
+                <span class="text-sm text-gray-600">Total Mahasiswa: {{ $kelas->mahasiswa->count() }}</span>
+            </div>
         </div>
 
         @if (session('success'))
@@ -26,7 +29,7 @@
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <h3 class="font-semibold text-lg">{{ $mk->nama }}</h3>
-                            <p class="text-sm text-gray-600">Kode: {{ $mk->kode }} | SKS: {{ $mk->sks }}</p>
+                            <p class="text-sm text-gray-600">Kode: {{ $mk->kode }} | SKS: {{ $mk->sks }} | Semester: {{ $mk->semester }} ({{ $mk->semester % 2 == 1 ? 'Ganjil' : 'Genap' }})</p>
                         </div>
                         <div class="text-right text-sm font-medium">
                             Pengambil:
