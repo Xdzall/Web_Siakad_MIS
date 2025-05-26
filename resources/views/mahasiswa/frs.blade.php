@@ -157,7 +157,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-sm text-yellow-700">
-                        FRS yang telah disetujui tidak dapat dihapus. Hubungi Admin jika ada perubahan.
+                        FRS yang telah disetujui tidak dapat dihapus. Hubungi Dosen Wali jika ada perubahan.
                     </p>
                 </div>
             </div>
