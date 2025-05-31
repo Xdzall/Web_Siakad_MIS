@@ -50,8 +50,7 @@ class KelasController extends Controller
         $mahasiswa = User::role('mahasiswa')
             ->where('semester', $semester)
             ->where(function ($query) use ($kelasId) {
-                $query->whereNull('kelas_id')
-                    ->orWhere('kelas_id', $kelasId);
+                $query->whereNull('kelas_id')->orWhere('kelas_id', $kelasId);
             })
             ->get();
         
@@ -122,8 +121,11 @@ class KelasController extends Controller
     // Update kelas
     public function update(Request $request, $id){
         Log::info('Current mahasiswa: ', [
-            'data' => $request->has('current_mahasiswa') ? $request->current_mahasiswa : 'none'
+            'data' => $request->has('current_mahasiswa')
+                ? $request->current_mahasiswa
+                : 'none'
         ]);
+
         $kelas = Kelas::findOrFail($id);
 
         $semesterChanged = $kelas->semester != $request->semester;
@@ -154,17 +156,25 @@ class KelasController extends Controller
         // If class is inactive, remove all students
         if (!$kelas->active) {
             User::where('kelas_id', $kelas->id)->update(['kelas_id' => null]);
-            return redirect()->route('admin.kelas.index')
-                ->with('warning', 'Kelas dinonaktifkan dan semua mahasiswa dipindahkan karena tidak ada dosen wali');
+            return redirect()
+                ->route('admin.kelas.index')
+                ->with(
+                    'warning',
+                    'Kelas dinonaktifkan dan semua mahasiswa dipindahkan karena tidak ada dosen wali'
+                );
         }
         
         // Process student assignments if class is active and form was submitted
         if ($kelas->active && $request->has('students_processed')) {
-            $currentStudentIds = User::where('kelas_id', $kelas->id)->pluck('id')->toArray();
-            
+            $currentStudentIds = User::where('kelas_id', $kelas->id)
+                ->pluck('id')
+                ->toArray();
+
             // Get submitted student IDs (could be empty array if all removed)
-            $submittedStudentIds = $request->has('current_mahasiswa') ? 
-                (is_array($request->current_mahasiswa) ? $request->current_mahasiswa : [$request->current_mahasiswa]) 
+            $submittedStudentIds = $request->has('current_mahasiswa')
+                ? (is_array($request->current_mahasiswa) 
+                    ? $request->current_mahasiswa 
+                    : [$request->current_mahasiswa]) 
                 : [];
             
             // Remove students no longer in the list
@@ -179,7 +189,8 @@ class KelasController extends Controller
             }
         }
         
-        return redirect()->route('admin.kelas.index')
+        return redirect()
+            ->route('admin.kelas.index')
             ->with('success', 'Kelas berhasil diupdate');
     }
 
@@ -188,7 +199,10 @@ class KelasController extends Controller
         $kelas = Kelas::findOrFail($id);
         User::where('kelas_id', $kelas->id)->update(['kelas_id' => null]);
         $kelas->delete();
-        return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil dihapus');
+        
+        return redirect()
+            ->route('admin.kelas.index')
+            ->with('success', 'Kelas berhasil dihapus');
     }
 
     public function observeDosenWali($kelas)

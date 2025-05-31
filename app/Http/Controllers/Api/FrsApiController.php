@@ -14,8 +14,6 @@ class FrsApiController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
-        // Get user's FRS submissions
         $frsSubmissions = FrsSubmission::where('mahasiswa_id', $user->id)
             ->with(['matakuliah.jadwalKuliah.dosen'])
             ->get()
@@ -73,7 +71,6 @@ class FrsApiController extends Controller
         
         $user = Auth::user();
         
-        // Check if already submitted
         $existing = FrsSubmission::where('mahasiswa_id', $user->id)
             ->where('matakuliah_id', $request->matakuliah_id)
             ->first();
@@ -84,7 +81,7 @@ class FrsApiController extends Controller
             ], 422);
         }
         
-        // Create FRS submission
+        // Create FRS 
         $frs = FrsSubmission::create([
             'mahasiswa_id' => $user->id,
             'matakuliah_id' => $request->matakuliah_id,

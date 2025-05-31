@@ -40,13 +40,16 @@ class DosenApiController extends Controller
     {
         $user = Auth::user();
         
+        $dosenWali = $user->is_wali ? Kelas::where('dosen_id', $user->id)->where('active', true)->first() : null;
+
+        
         return response()->json([
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'nip' => $user->nip,
             'is_wali' => $user->is_wali,
-            'kelas_wali' => $user->is_wali ? Kelas::where('dosen_id', $user->id)->where('active', true)->first() : null
+            'kelas_wali' => $dosenWali
         ]);
     }
 }

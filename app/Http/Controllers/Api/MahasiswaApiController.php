@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -62,7 +61,6 @@ class MahasiswaApiController extends Controller
             
         // Calculate IP
         $ip = $this->calculateIP($user->id);
-        
         return response()->json([
             'approved_courses' => $approvedCourses,
             'pending_frs' => $pendingFrs,
