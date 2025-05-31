@@ -56,10 +56,18 @@ class FrsApiController extends Controller
                 }
             }
         }
+
+        $studentInfo = [
+            'kelas' => $kelas ? $kelas->nama : '-',
+            'dosen_wali' => $kelas && $kelas->dosen 
+                ? $kelas->dosen->name : '-',
+            'max_sks' => 24
+        ];
         
         return response()->json([
             'frs_submissions' => $frsSubmissions,
-            'available_courses' => $availableCourses
+            'available_courses' => $availableCourses,
+            'student_info' => $studentInfo
         ]);
     }
     
